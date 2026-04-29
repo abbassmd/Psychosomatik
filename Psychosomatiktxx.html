@@ -1,9 +1,12 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de" data-theme="dark" class="markmap-dark">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="ie=edge"><meta name="color-scheme" content="light dark">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="color-scheme" content="light dark">
 <title>Psychiatrie / Psychosomatik – Therapie-Mindmap</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.18.12/dist/style.css">
+
 <style>
 :root{--bg:#f6f8fb;--map:#fbfcff;--panel:rgba(255,255,255,.93);--solid:#fff;--text:#0f172a;--muted:#475569;--border:rgba(15,23,42,.13);--shadow:0 18px 50px rgba(15,23,42,.14);--accent:#2563eb;--accent2:#7c3aed;--soft:rgba(37,99,235,.11);--branch:rgba(37,99,235,.45);--node:#fff;--nodeStroke:rgba(37,99,235,.32);--head:86px}
 html[data-theme=dark]{--bg:#0b1120;--map:#0f172a;--panel:rgba(15,23,42,.9);--solid:#111827;--text:#e5e7eb;--muted:#a7b2c4;--border:rgba(226,232,240,.16);--shadow:0 18px 55px rgba(0,0,0,.42);--accent:#60a5fa;--accent2:#a78bfa;--soft:rgba(96,165,250,.16);--branch:rgba(147,197,253,.48);--node:#111827;--nodeStroke:rgba(147,197,253,.35)}
@@ -17,32 +20,41 @@ h1{margin:0;font-size:clamp(17px,2.3vw,24px);line-height:1.05;letter-spacing:-.0
 .controls{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;align-items:center}
 .group{display:inline-flex;gap:8px;align-items:center;padding:4px;border:1px solid var(--border);border-radius:16px;background:var(--soft)}
 button,input{font:inherit}
-.btn,.search,.toolbar-theme{min-height:36px;border:1px solid var(--border);border-radius:12px;background:var(--solid);color:var(--text);font-weight:750}
+.btn,.search{min-height:36px;border:1px solid var(--border);border-radius:12px;background:var(--solid);color:var(--text);font-weight:750}
 .btn{padding:0 12px;cursor:pointer;transition:.14s}
 .btn:hover{color:var(--accent);transform:translateY(-1px)}
 .btn.active{border-color:transparent;background:var(--accent);color:#fff}
 .search{width:min(340px,36vw);padding:0 12px;outline:0;font-weight:650}
 .search::placeholder{color:var(--muted)}
-.btn:focus-visible,.search:focus,.toolbar-theme:focus-visible{outline:3px solid var(--soft);outline-offset:2px}
+.btn:focus-visible,.search:focus{outline:3px solid var(--soft);outline-offset:2px}
 .shell{position:fixed;inset:0;overflow:hidden;background:radial-gradient(circle at top left,var(--soft),transparent 32%),radial-gradient(circle at bottom right,rgba(124,58,237,.13),transparent 36%),var(--map)}
 #mindmap{display:block;width:100vw;height:100vh;padding-top:var(--head);background:transparent;cursor:grab}
 #mindmap:active{cursor:grabbing}
 #mindmap text{fill:var(--text)!important;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;font-size:15px!important;font-weight:650!important;letter-spacing:-.01em}
 #mindmap g.markmap-node>circle{fill:var(--node)!important;stroke:var(--nodeStroke)!important;stroke-width:1.6px!important}
 #mindmap path.markmap-link{stroke:var(--branch)!important;stroke-width:1.8px!important}
+#mindmap g.markmap-node.markmap-clickable .markmap-foreign{cursor:pointer}
+#mindmap g.markmap-node.markmap-clickable .markmap-foreign:hover{color:var(--accent)!important}
 .badge{position:fixed;z-index:12;left:22px;bottom:24px;display:inline-flex;gap:8px;align-items:center;max-width:min(620px,calc(100vw - 220px));padding:10px 13px;border:1px solid var(--border);border-radius:999px;background:var(--panel);box-shadow:0 10px 28px rgba(15,23,42,.12);color:var(--muted);font-size:12px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--soft)}
-.study-toolbar,.markmap-toolbar{z-index:30!important;border:1px solid var(--border)!important;border-radius:18px!important;background:var(--panel)!important;box-shadow:var(--shadow)!important;color:var(--text)!important;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important}
-.markmap-toolbar a[href*=markmap],.markmap-toolbar a[title*=markmap],.markmap-toolbar a[aria-label*=markmap]{display:none!important;pointer-events:none!important}
-.markmap-toolbar svg,.markmap-toolbar button,.markmap-toolbar a{color:var(--text)!important;fill:currentColor!important}
-.toolbar-brand{display:inline-flex;align-items:center;justify-content:center;min-height:32px;margin:4px 6px 4px 4px;padding:0 11px;border:1px solid var(--border);border-radius:12px;background:var(--soft);color:var(--accent);font-size:12px;font-weight:850;text-decoration:none;white-space:nowrap;user-select:none}
-.toolbar-theme{min-width:36px;min-height:32px;margin:4px 4px 4px 6px;padding:0 10px;font-size:13px;font-weight:850;cursor:pointer}
 .msg{position:fixed;z-index:40;top:100px;left:50%;display:none;max-width:min(720px,calc(100vw - 28px));padding:12px 14px;border:1px solid var(--border);border-radius:16px;background:var(--solid);color:var(--text);box-shadow:var(--shadow);font-size:13px;line-height:1.35;transform:translateX(-50%)}
 .msg.on{display:block}
+
+/* hide original Markmap toolbar/logo completely */
+.mm-toolbar,.markmap-toolbar,.mm-toolbar-brand,.mm-toolbar a[href*="markmap"],.mm-toolbar a[title*="markmap"],.mm-toolbar a[aria-label*="markmap"]{display:none!important;pointer-events:none!important}
+
+/* clean custom toolbar */
+.custom-toolbar{position:fixed;z-index:30;right:20px;bottom:20px;display:flex;align-items:center;gap:6px;padding:7px;border:1px solid var(--border);border-radius:18px;background:var(--panel);box-shadow:var(--shadow);color:var(--text);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.toolbar-brand{display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:0 11px;border:1px solid var(--border);border-radius:12px;background:var(--soft);color:var(--accent);font-size:12px;font-weight:850;white-space:nowrap;user-select:none}
+.toolbtn{display:inline-flex;align-items:center;justify-content:center;width:34px;height:32px;border:1px solid var(--border);border-radius:12px;background:var(--solid);color:var(--text);font-size:17px;font-weight:900;cursor:pointer;line-height:1;transition:.14s}
+.toolbtn:hover{color:var(--accent);transform:translateY(-1px)}
+.toolbtn:focus-visible{outline:3px solid var(--soft);outline-offset:2px}
+
 @media(max-width:980px){.top{grid-template-columns:1fr}.controls{justify-content:flex-start}.search{width:100%}.badge{max-width:calc(100vw - 32px);bottom:92px}}
-@media(max-width:640px){:root{--head:168px}.top{top:8px;left:8px;right:8px;padding:12px;border-radius:20px}.sub{white-space:normal}.controls,.group{width:100%}.group{flex-wrap:wrap}.btn,.search{flex:1 1 auto}}
+@media(max-width:640px){:root{--head:168px}.top{top:8px;left:8px;right:8px;padding:12px;border-radius:20px}.sub{white-space:normal}.controls,.group{width:100%}.group{flex-wrap:wrap}.btn,.search{flex:1 1 auto}.custom-toolbar{right:8px;bottom:10px}.toolbar-brand{display:none}}
 </style>
 </head>
+
 <body>
 
 <header class="top" aria-label="Mindmap-Steuerung">
@@ -56,8 +68,8 @@ button,input{font:inherit}
 
   <div class="controls">
     <div class="group" aria-label="Ansicht wählen">
-      <button class="btn active" id="full" type="button" title="Alle Kategorien und Unterpunkte anzeigen">Vollansicht</button>
-      <button class="btn" id="overview" type="button" title="Nur Hauptbereiche anzeigen">Überblick</button>
+      <button class="btn" id="full" type="button" title="Alle Kategorien und Unterpunkte anzeigen">Vollansicht</button>
+      <button class="btn active" id="overview" type="button" title="Nur Hauptbereiche anzeigen, Details bleiben aufklappbar">Überblick</button>
     </div>
 
     <div class="group" aria-label="Mindmap durchsuchen">
@@ -71,19 +83,18 @@ button,input{font:inherit}
 </header>
 
 <main class="shell" aria-label="Mindmap-Fläche">
-  <svg id="mindmap" role="img" aria-label="Psychiatrie und Psychosomatik Therapie Mindmap"></svg>
+  <svg id="mindmap" role="img" aria-label="Psychiatrie und Psychosomatik Therapie Mindmap" class="markmap mindmap"></svg>
 </main>
 
 <div class="badge" id="badge" aria-live="polite">
   <span class="dot" aria-hidden="true"></span>
-  <span>Vollansicht · leitlinienorientierte Therapie sichtbar</span>
+  <span>Überblick · Hauptbereiche sichtbar · Text oder Kreis anklicken zum Öffnen</span>
 </div>
 
 <div class="msg" id="msg" role="status" aria-live="polite"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18.12/dist/browser/index.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.18.12/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-view/dist/browser/index.js"></script>
 
 <script id="mindmap-data" type="application/json">
 {
@@ -587,8 +598,9 @@ const search=$("search");
 const searchBtn=$("searchBtn");
 const clearSearch=$("clearSearch");
 
-let mm;
-let toolbarTheme;
+let mm=null;
+let toolbarEl=null;
+let currentZoom=1;
 
 const clone=o=>JSON.parse(JSON.stringify(o));
 const count=n=>1+(n.children||[]).reduce((s,c)=>s+count(c),0);
@@ -615,10 +627,11 @@ const apply=(t,save=true)=>{
   theme.textContent=t==="dark" ? "☀ Hell" : "☾ Dunkel";
   theme.setAttribute("aria-label",t==="dark" ? "Zum hellen Modus wechseln" : "Zum dunklen Modus wechseln");
 
-  if(toolbarTheme){
-    toolbarTheme.textContent=t==="dark" ? "☀" : "☾";
-    toolbarTheme.title=t==="dark" ? "Hellen Modus aktivieren" : "Dunklen Modus aktivieren";
-    toolbarTheme.setAttribute("aria-label",toolbarTheme.title);
+  const tbTheme=document.querySelector("#toolbarTheme");
+  if(tbTheme){
+    tbTheme.textContent=t==="dark" ? "☀" : "☾";
+    tbTheme.title="Hell/Dunkel wechseln";
+    tbTheme.setAttribute("aria-label","Hell/Dunkel wechseln");
   }
 };
 
@@ -634,11 +647,6 @@ const setActive=view=>{
   overview.classList.toggle("active",view==="overview");
 };
 
-const fit=(delay=80)=>setTimeout(()=>{
-  try{ if(mm&&mm.fit) mm.fit(); }
-  catch(e){ console.warn("Fit failed",e); }
-},delay);
-
 const show=text=>{
   msg.textContent=text;
   msg.classList.add("on");
@@ -646,31 +654,174 @@ const show=text=>{
   show.timer=setTimeout(()=>msg.classList.remove("on"),3200);
 };
 
-const setMap=(data,label,view)=>{
-  if(!mm) return;
-  mm.setData(clone(data));
-  setActive(view);
-  setBadge(label);
-  fit();
+const fit=(delay=80)=>setTimeout(()=>{
+  try{
+    if(mm&&typeof mm.fit==="function") mm.fit();
+    currentZoom=1;
+  }catch(e){console.warn("Fit failed",e);}
+},delay);
+
+const rescale=ratio=>{
+  try{
+    if(mm&&typeof mm.rescale==="function"){
+      currentZoom*=ratio;
+      mm.rescale(currentZoom);
+      return;
+    }
+  }catch(e){console.warn("rescale failed",e);}
+
+  const g=document.querySelector("#mindmap>g");
+  if(!g) return;
+  currentZoom*=ratio;
+  const tr=g.getAttribute("transform")||"translate(0,0) scale(1)";
+  const t=tr.match(/translate\(([^)]*)\)/)?.[0]||"translate(0,0)";
+  g.setAttribute("transform",`${t} scale(${currentZoom})`);
 };
 
-const overviewData=()=>{
-  const root=clone(DATA);
-  root.children=root.children.map(section=>({
-    content:section.content,
-    children:[],
-    payload:section.payload||{}
-  }));
-  return root;
+const hasChildren=d=>!!(d&&((d.children&&d.children.length)||(d._children&&d._children.length)));
+
+const markClickableNodes=()=>{
+  document.querySelectorAll("#mindmap g.markmap-node").forEach(g=>{
+    const clickable=hasChildren(g.__data__);
+    g.classList.toggle("markmap-clickable",clickable);
+    const fo=g.querySelector(".markmap-foreign");
+    if(fo){
+      fo.style.cursor=clickable ? "pointer" : "default";
+      if(clickable) fo.setAttribute("title","Klicken zum Ein-/Ausklappen");
+      else fo.removeAttribute("title");
+    }
+  });
 };
+
+const afterRender=()=>{
+  markClickableNodes();
+  setTimeout(markClickableNodes,80);
+  setTimeout(markClickableNodes,520);
+};
+
+function removeDefaultMarkmapToolbar(){
+  document.querySelectorAll(".mm-toolbar,.markmap-toolbar,.mm-toolbar-brand").forEach(el=>el.remove());
+}
+
+function removeCustomToolbar(){
+  if(toolbarEl&&toolbarEl.parentNode) toolbarEl.parentNode.removeChild(toolbarEl);
+  toolbarEl=null;
+}
+
+function toolButton(text,title,onClick,id){
+  const btn=document.createElement("button");
+  btn.type="button";
+  btn.className="toolbtn";
+  btn.textContent=text;
+  btn.title=title;
+  btn.setAttribute("aria-label",title);
+  if(id) btn.id=id;
+  btn.addEventListener("click",onClick);
+  return btn;
+}
+
+function makeToolbar(){
+  removeDefaultMarkmapToolbar();
+  removeCustomToolbar();
+
+  toolbarEl=document.createElement("div");
+  toolbarEl.className="custom-toolbar";
+
+  const brand=document.createElement("span");
+  brand.className="toolbar-brand";
+  brand.textContent="Lernmap";
+  brand.title="Lokale Lern-Mindmap – ohne Markmap-Logo";
+
+  toolbarEl.append(
+    brand,
+    toolButton("+","Vergrößern",()=>rescale(1.2)),
+    toolButton("−","Verkleinern",()=>rescale(1/1.2)),
+    toolButton("⛶","An Fenster anpassen",()=>fit(0)),
+    toolButton("◎","Überblick anzeigen",()=>{
+      search.value="";
+      renderMap(DATA,"Überblick · Hauptbereiche sichtbar · Text oder Kreis anklicken zum Öffnen","overview",2);
+    }),
+    toolButton("↕","Alles aufklappen",()=>{
+      search.value="";
+      renderMap(DATA,`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`,"full",-1);
+    }),
+    toolButton(document.documentElement.dataset.theme==="dark" ? "☀" : "☾","Hell/Dunkel wechseln",()=>toggle(),"toolbarTheme")
+  );
+
+  document.body.appendChild(toolbarEl);
+}
+
+function bindLabelToggle(){
+  const svg=$("mindmap");
+  if(!svg||svg.dataset.labelToggleBound) return;
+  svg.dataset.labelToggleBound="1";
+
+  svg.addEventListener("click",e=>{
+    const target=e.target instanceof Element ? e.target : null;
+    const label=target&&target.closest ? target.closest(".markmap-foreign") : null;
+    if(!label) return;
+
+    const node=label.closest("g.markmap-node");
+    const d=node&&node.__data__;
+    if(!hasChildren(d)) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const circle=node.querySelector("circle");
+    if(circle){
+      circle.dispatchEvent(new MouseEvent("click",{bubbles:true,cancelable:true,view:window}));
+    }else if(mm&&typeof mm.handleClick==="function"){
+      mm.handleClick(e,d);
+    }else if(mm&&typeof mm.toggleNode==="function"){
+      mm.toggleNode(d,false);
+    }
+
+    afterRender();
+  },true);
+}
+
+function renderMap(data,label,view,initialExpandLevel){
+  if(!window.markmap||!window.d3){
+    show("Markmap konnte nicht geladen werden. Bitte Internetverbindung oder CDN-Zugriff prüfen.");
+    return;
+  }
+
+  setActive(view);
+  setBadge(label);
+  currentZoom=1;
+
+  const svg=document.querySelector("svg#mindmap");
+  svg.innerHTML="";
+  removeDefaultMarkmapToolbar();
+  removeCustomToolbar();
+
+  const {Markmap,deriveOptions}=window.markmap;
+  const options=deriveOptions({
+    autoFit:true,
+    colorFreezeLevel:2,
+    duration:420,
+    initialExpandLevel,
+    maxWidth:360,
+    spacingHorizontal:92,
+    spacingVertical:11
+  });
+
+  mm=Markmap.create("svg#mindmap",options,clone(data));
+  window.mm=mm;
+  window.psychosomatikMindmapData=DATA;
+  window.therapieMindmapData=DATA;
+
+  makeToolbar();
+  afterRender();
+  fit(180);
+}
 
 const filterTree=(node,q)=>{
   const ownMatch=norm(node.content).includes(q);
   const childMatches=(node.children||[]).map(child=>filterTree(child,q)).filter(Boolean);
 
-  if(ownMatch){
-    return clone(node);
-  }
+  if(ownMatch) return clone(node);
 
   if(childMatches.length){
     const copy=clone(node);
@@ -681,116 +832,40 @@ const filterTree=(node,q)=>{
   return null;
 };
 
-const searchTree=()=>{
+function searchTree(){
   const raw=search.value.trim();
 
   if(!raw){
-    setMap(DATA,`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`,"full");
+    renderMap(DATA,`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`,"full",-1);
     return;
   }
 
-  const q=norm(raw);
-  const result=filterTree(DATA,q);
+  const result=filterTree(DATA,norm(raw));
 
-  if(!result || !result.children || result.children.length===0){
+  if(!result||!result.children||result.children.length===0){
     const empty={
       content:DATA.content,
-      children:[
-        {
-          content:`Keine Treffer für „${raw}“`,
-          children:[
-            {content:"Tipp: Suche kürzer, z. B. „Depression“, „SSRI“, „Schlaf“, „Psychose“, „EKT“",children:[]}
-          ]
-        }
-      ]
+      children:[{
+        content:`Keine Treffer für „${raw}“`,
+        children:[{content:"Tipp: Suche kürzer, z. B. „Depression“, „SSRI“, „Schlaf“, „Psychose“, „EKT“",children:[]}]
+      }]
     };
-    setMap(empty,`Suche · keine Treffer für „${raw}“`,"search");
+    renderMap(empty,`Suche · keine Treffer für „${raw}“`,"search",-1);
     show(`Keine Treffer für „${raw}“. Versuche ein kürzeres Suchwort.`);
     return;
   }
 
-  setMap(result,`Suche · Treffer für „${raw}“ · ${count(result)} sichtbare Knoten`,"search");
-};
-
-function makeToolbar(){
-  if(!window.markmap||!window.markmap.Toolbar||!mm) return;
-
-  const toolbar=new window.markmap.Toolbar();
-  toolbar.attach(mm);
-  const el=toolbar.render();
-
-  el.classList.add("study-toolbar");
-  el.style.position="absolute";
-  el.style.bottom="20px";
-  el.style.right="20px";
-
-  el.querySelectorAll("a").forEach(a=>{
-    const href=(a.getAttribute("href")||"").toLowerCase();
-    const label=`${a.textContent||""} ${a.title||""} ${a.getAttribute("aria-label")||""}`.toLowerCase();
-
-    if(href.includes("markmap")||label.includes("markmap")){
-      a.removeAttribute("href");
-      a.removeAttribute("target");
-      a.removeAttribute("rel");
-      a.setAttribute("aria-hidden","true");
-      a.setAttribute("tabindex","-1");
-      a.style.display="none";
-      a.style.pointerEvents="none";
-    }
-  });
-
-  const brand=document.createElement("span");
-  brand.className="toolbar-brand";
-  brand.textContent="Lernmap";
-  brand.title="Lokale Lern-Mindmap – kein externer Link";
-  el.prepend(brand);
-
-  toolbarTheme=document.createElement("button");
-  toolbarTheme.className="toolbar-theme";
-  toolbarTheme.type="button";
-  toolbarTheme.addEventListener("click",toggle);
-  el.append(toolbarTheme);
-
-  document.body.append(el);
-  apply(document.documentElement.dataset.theme||pref(),false);
-}
-
-function init(){
-  if(!window.markmap||!window.d3){
-    show("Die Markmap-Bibliotheken konnten nicht geladen werden. Prüfe bitte Internetverbindung oder CDN-Zugriff.");
-    return;
-  }
-
-  const {Markmap,deriveOptions}=window.markmap;
-
-  const options=deriveOptions({
-    autoFit:true,
-    colorFreezeLevel:2,
-    duration:420,
-    initialExpandLevel:-1,
-    maxWidth:360,
-    spacingHorizontal:92,
-    spacingVertical:11
-  });
-
-  mm=Markmap.create("svg#mindmap",options,clone(DATA));
-  window.mm=mm;
-  window.psychosomatikMindmapData=DATA;
-  window.therapieMindmapData=DATA;
-
-  makeToolbar();
-  fit(180);
-  setBadge(`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`);
+  renderMap(result,`Suche · Treffer für „${raw}“ · ${count(result)} sichtbare Knoten`,"search",-1);
 }
 
 full.addEventListener("click",()=>{
   search.value="";
-  setMap(DATA,`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`,"full");
+  renderMap(DATA,`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`,"full",-1);
 });
 
 overview.addEventListener("click",()=>{
   search.value="";
-  setMap(overviewData(),"Überblick · nur Hauptbereiche sichtbar · Vollansicht stellt alle Details wieder her","overview");
+  renderMap(DATA,"Überblick · Hauptbereiche sichtbar · Text oder Kreis anklicken zum Öffnen","overview",2);
 });
 
 searchBtn.addEventListener("click",searchTree);
@@ -799,7 +874,7 @@ search.addEventListener("keydown",e=>{
   if(e.key==="Enter") searchTree();
   if(e.key==="Escape"){
     search.value="";
-    setMap(DATA,`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`,"full");
+    renderMap(DATA,`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`,"full",-1);
   }
 });
 
@@ -811,7 +886,7 @@ search.addEventListener("input",()=>{
 
 clearSearch.addEventListener("click",()=>{
   search.value="";
-  setMap(DATA,`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`,"full");
+  renderMap(DATA,`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`,"full",-1);
   search.focus();
 });
 
@@ -819,9 +894,14 @@ theme.addEventListener("click",toggle);
 window.addEventListener("resize",()=>fit(160));
 
 apply(pref(),false);
-init();
+bindLabelToggle();
+
+window.addEventListener("load",()=>{
+  renderMap(DATA,"Überblick · Hauptbereiche sichtbar · Text oder Kreis anklicken zum Öffnen","overview",2);
+});
 
 })();
 </script>
+
 </body>
 </html>
