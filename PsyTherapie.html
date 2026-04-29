@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark" class="markmap-dark"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="color-scheme" content="light dark">
+<title>Psychiatrie / Psychosomatik – Therapie-Mindmap</title>
+
+<style>
+:root{--bg:#f6f8fb;--map:#fbfcff;--panel:rgba(255,255,255,.93);--solid:#fff;--text:#0f172a;--muted:#475569;--border:rgba(15,23,42,.13);--shadow:0 18px 50px rgba(15,23,42,.14);--accent:#2563eb;--accent2:#7c3aed;--soft:rgba(37,99,235,.11);--branch:rgba(37,99,235,.45);--node:#fff;--nodeStroke:rgba(37,99,235,.32);--head:86px}
+html[data-theme=dark]{--bg:#0b1120;--map:#0f172a;--panel:rgba(15,23,42,.9);--solid:#111827;--text:#e5e7eb;--muted:#a7b2c4;--border:rgba(226,232,240,.16);--shadow:0 18px 55px rgba(0,0,0,.42);--accent:#60a5fa;--accent2:#a78bfa;--soft:rgba(96,165,250,.16);--branch:rgba(147,197,253,.48);--node:#111827;--nodeStroke:rgba(147,197,253,.35)}
+*{box-sizing:border-box}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.top{position:fixed;z-index:20;top:14px;left:14px;right:14px;display:grid;grid-template-columns:minmax(250px,1fr) auto;gap:16px;align-items:center;min-height:70px;padding:14px 16px;border:1px solid var(--border);border-radius:24px;background:var(--panel);box-shadow:var(--shadow);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.logo{display:grid;place-items:center;width:42px;height:42px;flex:0 0 auto;border-radius:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:900;box-shadow:0 10px 28px rgba(37,99,235,.26)}
+h1{margin:0;font-size:clamp(17px,2.3vw,24px);line-height:1.05;letter-spacing:-.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sub{margin-top:5px;color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.controls{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;align-items:center}
+.group{display:inline-flex;gap:8px;align-items:center;padding:4px;border:1px solid var(--border);border-radius:16px;background:var(--soft)}
+button,input{font:inherit}
+.btn,.search{min-height:36px;border:1px solid var(--border);border-radius:12px;background:var(--solid);color:var(--text);font-weight:750}
+.btn{padding:0 12px;cursor:pointer;transition:.14s}
+.btn:hover{color:var(--accent);transform:translateY(-1px)}
+.btn.active{border-color:transparent;background:var(--accent);color:#fff}
+.search{width:min(340px,36vw);padding:0 12px;outline:0;font-weight:650}
+.search::placeholder{color:var(--muted)}
+.btn:focus-visible,.search:focus{outline:3px solid var(--soft);outline-offset:2px}
+.shell{position:fixed;inset:0;overflow:hidden;background:radial-gradient(circle at top left,var(--soft),transparent 32%),radial-gradient(circle at bottom right,rgba(124,58,237,.13),transparent 36%),var(--map)}
+#mindmap{display:block;width:100vw;height:100vh;padding-top:var(--head);background:transparent;cursor:grab}
+#mindmap:active{cursor:grabbing}
+#mindmap text{fill:var(--text)!important;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;font-size:15px!important;font-weight:650!important;letter-spacing:-.01em}
+#mindmap g.markmap-node>circle{fill:var(--node)!important;stroke:var(--nodeStroke)!important;stroke-width:1.6px!important;cursor:pointer!important}
+#mindmap path.markmap-link{stroke:var(--branch)!important;stroke-width:1.8px!important}
+#mindmap .markmap-foreign,#mindmap .markmap-foreign *{cursor:text!important;user-select:text!important;-webkit-user-select:text!important;-moz-user-select:text!important;-ms-user-select:text!important}
+#mindmap g.markmap-node.markmap-clickable .markmap-foreign:hover{color:var(--text)!important}
+.badge{position:fixed;z-index:12;left:22px;bottom:24px;display:inline-flex;gap:8px;align-items:center;max-width:min(620px,calc(100vw - 220px));padding:10px 13px;border:1px solid var(--border);border-radius:999px;background:var(--panel);box-shadow:0 10px 28px rgba(15,23,42,.12);color:var(--muted);font-size:12px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--soft)}
+.msg{position:fixed;z-index:40;top:100px;left:50%;display:none;max-width:min(720px,calc(100vw - 28px));padding:12px 14px;border:1px solid var(--border);border-radius:16px;background:var(--solid);color:var(--text);box-shadow:var(--shadow);font-size:13px;line-height:1.35;transform:translateX(-50%)}
+.msg.on{display:block}
+
+/* hide original Markmap toolbar/logo completely */
+.mm-toolbar,.markmap-toolbar,.mm-toolbar-brand,.mm-toolbar a[href*="markmap"],.mm-toolbar a[title*="markmap"],.mm-toolbar a[aria-label*="markmap"]{display:none!important;pointer-events:none!important}
+
+/* clean custom toolbar */
+.custom-toolbar{position:fixed;z-index:30;right:20px;bottom:20px;display:flex;align-items:center;gap:6px;padding:7px;border:1px solid var(--border);border-radius:18px;background:var(--panel);box-shadow:var(--shadow);color:var(--text);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.toolbar-brand{display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:0 11px;border:1px solid var(--border);border-radius:12px;background:var(--soft);color:var(--accent);font-size:12px;font-weight:850;white-space:nowrap;user-select:none}
+.toolbtn{display:inline-flex;align-items:center;justify-content:center;width:34px;height:32px;border:1px solid var(--border);border-radius:12px;background:var(--solid);color:var(--text);font-size:17px;font-weight:900;cursor:pointer;line-height:1;transition:.14s}
+.toolbtn:hover{color:var(--accent);transform:translateY(-1px)}
+.toolbtn:focus-visible{outline:3px solid var(--soft);outline-offset:2px}
+
+@media(max-width:980px){.top{grid-template-columns:1fr}.controls{justify-content:flex-start}.search{width:100%}.badge{max-width:calc(100vw - 32px);bottom:92px}}
+@media(max-width:640px){:root{--head:168px}.top{top:8px;left:8px;right:8px;padding:12px;border-radius:20px}.sub{white-space:normal}.controls,.group{width:100%}.group{flex-wrap:wrap}.btn,.search{flex:1 1 auto}.custom-toolbar{right:8px;bottom:10px}.toolbar-brand{display:none}}
+
+#mindmap g.markmap-node.markmap-clickable{cursor:default!important}
+#mindmap g.markmap-node.markmap-clickable line{cursor:default!important}
+#mindmap g.markmap-node.markmap-clickable circle{cursor:pointer!important}
+#mindmap g.markmap-node.markmap-clickable .markmap-foreign,#mindmap g.markmap-node.markmap-clickable .markmap-foreign *{cursor:text!important;user-select:text!important;-webkit-user-select:text!important;-moz-user-select:text!important;-ms-user-select:text!important}
+#mindmap g.markmap-node.markmap-clickable:hover .markmap-foreign{color:var(--text)!important}
+</style>
+</head>
+
+<body>
+
+<header class="top" aria-label="Mindmap-Steuerung">
+  <div class="brand">
+    <div class="logo" aria-hidden="true">Ψ</div>
+    <div>
+      <h1>Psychiatrie / Psychosomatik</h1>
+      <div class="sub">Leitlinienorientierte Therapie-Mindmap · Suche statt Kapitel-Auswahl · Stand 04/2026</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="group" aria-label="Ansicht wählen">
+      <button class="btn" id="full" type="button" title="Alle Kategorien und Unterpunkte anzeigen">Vollansicht</button>
+      <button class="btn active" id="overview" type="button" title="Nur Hauptbereiche anzeigen, Details bleiben aufklappbar">Überblick</button>
+    </div>
+
+    <div class="group" aria-label="Mindmap durchsuchen">
+      <input class="search" id="search" type="search" placeholder="Suche: Depression, SSRI, EKT..." autocomplete="off">
+      <button class="btn" id="searchBtn" type="button" title="Suche ausführen">Suchen</button>
+      <button class="btn" id="clearSearch" type="button" title="Suche löschen">Löschen</button>
+    </div>
+
+    <button class="btn" id="theme" type="button" title="Hell/Dunkel wechseln" aria-label="Zum hellen Modus wechseln">☀ Hell</button>
+  </div>
+</header>
+
+<main class="shell" aria-label="Mindmap-Fläche">
+  <svg id="mindmap" role="img" aria-label="Psychiatrie und Psychosomatik Therapie-Mindmap" class="markmap mindmap" data-label-toggle-bound="1" style="--markmap-max-width: 360px;"></svg>
+</main>
+
+<div class="badge" id="badge" aria-live="polite">
+  <span class="dot" aria-hidden="true"></span>
+  <span>Überblick · Hauptbereiche sichtbar · Kreis anklicken zum Öffnen · Text ist auswählbar</span>
+</div>
+
+<div class="msg" id="msg" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-view/dist/browser/index.js"></script>
+
+<script id="mindmap-data" type="application/json">
+{
+  "content": "Psychiatrie / Psychosomatik – Therapie-Mindmap nach deutschen Leitlinien",
+  "children": [
+    {
+      "content": "A. Vor jeder Therapie: Anamnese, Befund, Risiko",
+      "children": [
+        {
+          "content": "Aktuelle Beschwerden",
+          "children": [
+            { "content": "Beginn, Dauer, Verlauf, Auslöser, Hauptsymptome, Leidensdruck", "children": [] },
+            { "content": "Alltagsfunktion, Selbstversorgung, Arbeitsfähigkeit, soziale Teilhabe", "children": [] },
+            { "content": "Schlaf, Appetit, Gewicht, Libido, Energie, Schmerzen, vegetative Zeichen", "children": [] }
+          ]
+        },
+        {
+          "content": "Psychiatrische Vorgeschichte",
+          "children": [
+            { "content": "frühere Episoden, Diagnosen, Klinikaufenthalte, Kriseninterventionen", "children": [] },
+            { "content": "Psychotherapie, Medikamente, Wirkung, Nebenwirkungen, Adhärenz", "children": [] },
+            { "content": "Suizidversuche, Selbstverletzung, Gewalt, Zwangsmaßnahmen, Traumatisierungen", "children": [] }
+          ]
+        },
+        {
+          "content": "Somatischer und organischer Ausschluss",
+          "children": [
+            { "content": "Vitalparameter, körperliche Untersuchung, neurologischer Kurzstatus", "children": [] },
+            { "content": "Basislabor: Blutbild/CRP, Elektrolyte, Nieren-/Leberwerte, Glukose, TSH, B12/Folat je nach Situation", "children": [] },
+            { "content": "EKG bei QT-/leitungsrelevanten Psychopharmaka oder kardialem Risiko", "children": [] },
+            { "content": "CCT/cMRT/EEG/weiterführende Diagnostik bei Erstpsychose, Delir, neurologischen Zeichen, Krampfanfall, atypischem Verlauf", "children": [] }
+          ]
+        },
+        {
+          "content": "Medikamenten- und Suchtanamnese",
+          "children": [
+            { "content": "Psychopharmaka, Analgetika, Schlafmittel, Benzodiazepine/Z-Substanzen, Kortison, Schilddrüsenmedikation", "children": [] },
+            { "content": "Alkohol, Nikotin, Cannabis, Stimulanzien, Opioide, Benzodiazepine, Halluzinogene", "children": [] },
+            { "content": "Intoxikation, Entzug und Medikamentennebenwirkungen können psychiatrische Symptome imitieren", "children": [] }
+          ]
+        },
+        {
+          "content": "Psychopathologischer Befund",
+          "children": [
+            { "content": "äußerer Eindruck, Kontakt, Bewusstsein, Orientierung, Aufmerksamkeit, Gedächtnis", "children": [] },
+            { "content": "formales und inhaltliches Denken, Wahn, Zwänge, Grübeln", "children": [] },
+            { "content": "Wahrnehmung, Halluzinationen, Ich-Störungen", "children": [] },
+            { "content": "Affektivität, Antrieb, Psychomotorik, Angst, Impulsivität", "children": [] },
+            { "content": "Krankheitseinsicht, Behandlungsbereitschaft, Absprachefähigkeit", "children": [] }
+          ]
+        },
+        {
+          "content": "Gefährdungsbeurteilung",
+          "children": [
+            { "content": "Suizidalität offen und empathisch erfragen: Gedanken, Plan, Vorbereitung, Mittel, frühere Versuche", "children": [] },
+            { "content": "Fremdgefährdung, Selbstvernachlässigung, Nahrungs-/Flüssigkeitsverweigerung, Delirrisiko", "children": [] },
+            { "content": "Schutzfaktoren, soziale Unterstützung, Zugang zu Mitteln, Intoxikation, Impulsivität", "children": [] },
+            { "content": "akute Gefahr: nicht allein lassen, Deeskalation, Team informieren, stationär/geschützt prüfen", "children": [] }
+          ]
+        }
+      ]
+    },
+    {
+      "content": "B. Grundprinzipien der Therapie",
+      "children": [
+        {
+          "content": "Sicherheitsorientiert",
+          "children": [
+            { "content": "Akut zuerst: Suizidalität, Fremdgefährdung, Delir, Intoxikation, Entzug, schwere Selbstvernachlässigung", "children": [] },
+            { "content": "Schutz, Reizreduktion, Deeskalation, Krisenplan, Einbezug von Bezugspersonen mit Einwilligung", "children": [] }
+          ]
+        },
+        {
+          "content": "Biopsychosozial",
+          "children": [
+            { "content": "körperliche Faktoren + psychische Prozesse + soziale Situation gemeinsam erklären", "children": [] },
+            { "content": "organische Ursachen nicht übersehen; aber endlose Wiederholungsdiagnostik ohne Red Flags vermeiden", "children": [] }
+          ]
+        },
+        {
+          "content": "Stufen- und schweregradorientiert",
+          "children": [
+            { "content": "ambulant, tagesklinisch, stationär oder geschützt stationär nach Risiko und Funktion entscheiden", "children": [] },
+            { "content": "Psychoedukation, Psychotherapie, Pharmakotherapie, somatische Verfahren und psychosoziale Hilfen kombinieren", "children": [] }
+          ]
+        },
+        {
+          "content": "Partizipativ und verlaufsorientiert",
+          "children": [
+            { "content": "Therapieziele, Präferenzen, Ressourcen, Kultur/Sprache, Angehörige und Komorbiditäten berücksichtigen", "children": [] },
+            { "content": "regelmäßige Kontrolle: Symptome, Funktion, Nebenwirkungen, Adhärenz, Risiko, Rückfallzeichen", "children": [] }
+          ]
+        }
+      ]
+    },
+    {
+      "content": "C. Psychotherapeutische Methoden",
+      "children": [
+        {
+          "content": "Kognitive Verhaltenstherapie (KVT)",
+          "children": [
+            { "content": "Gedanken, Gefühle, Körperreaktionen und Verhalten verbinden", "children": [] },
+            { "content": "dysfunktionale Annahmen prüfen, Aktivierung und Problemlösen üben", "children": [] },
+            { "content": "wichtig bei Depression, Angst, Zwang, Somatisierung, Essstörungen und Insomnie", "children": [] }
+          ]
+        },
+        {
+          "content": "Exposition",
+          "children": [
+            { "content": "kontrollierte Konfrontation mit Angst-/Triggerreizen", "children": [] },
+            { "content": "Vermeidung abbauen, Sicherheitsverhalten reduzieren, neue Erfahrung ermöglichen", "children": [] }
+          ]
+        },
+        {
+          "content": "Exposition mit Reaktionsmanagement",
+          "children": [
+            { "content": "Kernmethode bei Zwangsstörung", "children": [] },
+            { "content": "Auslöser aufsuchen, Ritual nicht ausführen, Angstkurve erleben", "children": [] },
+            { "content": "Rückfallprophylaxe und Booster einplanen", "children": [] }
+          ]
+        },
+        {
+          "content": "Traumafokussierte Psychotherapie / EMDR",
+          "children": [
+            { "content": "bei PTBS nach Sicherheitsaufbau und Stabilisierung", "children": [] },
+            { "content": "Trigger, Flashbacks, Albträume, Schuld, Scham und Vermeidung bearbeiten", "children": [] },
+            { "content": "Benzodiazepine nicht als Dauerlösung bei PTBS", "children": [] }
+          ]
+        },
+        {
+          "content": "Psychodynamische / tiefenpsychologisch fundierte Therapie",
+          "children": [
+            { "content": "innere Konflikte, Beziehungsmuster, Biografie, Übertragung/Gegenübertragung", "children": [] },
+            { "content": "hilfreich bei psychosomatischen Beschwerden, Beziehungskonflikten, Persönlichkeitsakzentuierung", "children": [] }
+          ]
+        },
+        {
+          "content": "Systemische Therapie",
+          "children": [
+            { "content": "Familie, Paar, Arbeit und soziale Systeme berücksichtigen", "children": [] },
+            { "content": "Ressourcen, Kommunikation, Rollen und Interaktionsmuster bearbeiten", "children": [] }
+          ]
+        },
+        {
+          "content": "Supportive Therapie",
+          "children": [
+            { "content": "Stabilisierung, Krisenbewältigung, Tagesstruktur, Ressourcen, Motivation", "children": [] },
+            { "content": "wichtig bei akuter Krise, schwerer Erkrankung und geringer Belastbarkeit", "children": [] }
+          ]
+        },
+        {
+          "content": "DBT / MBT / Schematherapie / TFP",
+          "children": [
+            { "content": "störungsspezifisch bei Borderline-Persönlichkeitsstörung und schweren Persönlichkeitsfunktionsstörungen", "children": [] },
+            { "content": "Emotionsregulation, Selbstverletzung, Beziehungsmuster, Mentalisieren, Krisenplan", "children": [] }
+          ]
+        },
+        {
+          "content": "KVT-I bei Insomnie",
+          "children": [
+            { "content": "erste Behandlungsoption bei chronischer Insomnie", "children": [] },
+            { "content": "Schlafedukation, Schlafrestriktion, Stimulus-Kontrolle, kognitive Techniken, Entspannung", "children": [] }
+          ]
+        }
+      ]
+    },
+    {
+      "content": "D. Pharmakotherapie und somatische Verfahren",
+      "children": [
+        {
+          "content": "Allgemeines Monitoring",
+          "children": [
+            { "content": "Indikation, Aufklärung, Einwilligung, Schwangerschaft, Komorbiditäten, Interaktionen, Suchtanamnese prüfen", "children": [] },
+            { "content": "Wirkung und Nebenwirkungen aktiv monitoren; Zielwerte und Absetzplan dokumentieren", "children": [] },
+            { "content": "Labor/EKG je nach Substanz und Risiko; Medikationsplan aktuell halten", "children": [] }
+          ]
+        },
+        {
+          "content": "Antidepressiva",
+          "children": [
+            { "content": "SSRI/SNRI: Depression, Angst, Zwang, PTBS-Komorbidität; Wirklatenz meist mehrere Wochen", "children": [] },
+            { "content": "Mirtazapin: Schlafstörung, Appetit-/Gewichtsverlust; Sedierung/Gewicht beachten", "children": [] },
+            { "content": "Trizyklika/Amitriptylin: Depression, Schmerz, Schlaf; anticholinerge und kardiale Risiken beachten", "children": [] },
+            { "content": "bei Suizidalität kleine Packungsgrößen, engmaschige Kontrolle, Überdosierungsrisiko beachten", "children": [] }
+          ]
+        },
+        {
+          "content": "Antipsychotika",
+          "children": [
+            { "content": "Indikationen: Psychose, Manie, schwere Agitation, psychotische Depression in Kombination", "children": [] },
+            { "content": "Nebenwirkungen: EPS, Akathisie, Sedierung, QT-Zeit, Prolaktin, metabolisches Syndrom", "children": [] },
+            { "content": "Clozapin bei therapieresistenter Schizophrenie prüfen; Blutbild- und Nebenwirkungsmonitoring", "children": [] }
+          ]
+        },
+        {
+          "content": "Benzodiazepine und Z-Substanzen",
+          "children": [
+            { "content": "nur kurzfristig und klar begründet: schwere Angst, Erregung, Entzug, Krampfanfall, Schlafkrise", "children": [] },
+            { "content": "Risiken: Sedierung, Atemdepression, Sturz, Verwirrtheit, Toleranz, Abhängigkeit, Entzug", "children": [] },
+            { "content": "keine Dauertherapie bei Depression, Angst, PTBS oder Insomnie", "children": [] }
+          ]
+        },
+        {
+          "content": "Stimmungsstabilisierer",
+          "children": [
+            { "content": "Lithium: bipolare Störung, Phasenprophylaxe, Manie-Kombination, Augmentation, Suizidprophylaxe", "children": [] },
+            { "content": "Kontrollen: Lithiumspiegel, Niere, TSH, Calcium, Elektrolyte, Gewicht, Interaktionen", "children": [] },
+            { "content": "Valproat, Carbamazepin, Lamotrigin nur indikations- und risikobezogen; Schwangerschaftsrisiken beachten", "children": [] }
+          ]
+        },
+        {
+          "content": "Elektrokonvulsionstherapie (EKT)",
+          "children": [
+            { "content": "Option bei schwerer, psychotischer, vital bedrohlicher oder therapieresistenter Depression", "children": [] },
+            { "content": "auch bei Katatonie und schweren affektiven Episoden prüfen", "children": [] },
+            { "content": "Weiterbehandlung nach EKT planen: Pharmakotherapie, Psychotherapie, Erhaltungs-EKT bei Bedarf", "children": [] }
+          ]
+        },
+        {
+          "content": "Weitere biologische Verfahren",
+          "children": [
+            { "content": "Lichttherapie bei saisonaler Depression oder zirkadianer Komponente", "children": [] },
+            { "content": "Bewegungs-/Sporttherapie als evidenzbasierter Baustein bei Depression und vielen Komorbiditäten", "children": [] },
+            { "content": "rTMS/Esketamin/andere Verfahren nur indikationsbezogen, leitlinien- und zulassungsnah prüfen", "children": [] }
+          ]
+        }
+      ]
+    },
+    {
+      "content": "E. Psychosoziale und rehabilitative Therapie",
+      "children": [
+        {
+          "content": "Tagesstruktur und Aktivierung",
+          "children": [
+            { "content": "Schlaf-Wach-Rhythmus, Mahlzeiten, Bewegung, soziale Aktivität", "children": [] },
+            { "content": "Vermeidung und Rückzug schrittweise abbauen", "children": [] }
+          ]
+        },
+        {
+          "content": "Angehörige und soziales Umfeld",
+          "children": [
+            { "content": "Einbezug mit Einwilligung, Psychoedukation, Entlastung, Krisenplan", "children": [] },
+            { "content": "besonders wichtig bei Demenz, Sucht, bipolarer Störung, Psychose, Essstörungen", "children": [] }
+          ]
+        },
+        {
+          "content": "Sozialdienst und Teilhabe",
+          "children": [
+            { "content": "Krankschreibung, Wiedereingliederung, Arbeit, Finanzen, Wohnen, Pflegegrad, Betreuung", "children": [] },
+            { "content": "ambulante psychiatrische Pflege, Soziotherapie, Ergotherapie, Selbsthilfe", "children": [] }
+          ]
+        },
+        {
+          "content": "Krisenmanagement",
+          "children": [
+            { "content": "Warnzeichen, Notfallkontakte, Absprachefähigkeit, Mittelreduktion, Rückfallprophylaxe", "children": [] },
+            { "content": "bei wiederkehrenden Krisen: schriftlicher Krisen- und Behandlungsplan", "children": [] }
+          ]
+        }
+      ]
+    },
+    {
+      "content": "F. Störungsspezifische Therapie",
+      "children": [
+        {
+          "content": "Depression",
+          "children": [
+            {
+              "content": "leichte Depression",
+              "children": [
+                { "content": "Psychoedukation, aktiv-abwartende Begleitung, Tagesstruktur, Schlafhygiene, Bewegung, soziale Aktivierung", "children": [] },
+                { "content": "Psychotherapie bei Bedarf; Antidepressiva nicht routinemäßig", "children": [] }
+              ]
+            },
+            {
+              "content": "mittelgradige Depression",
+              "children": [
+                { "content": "Psychotherapie oder Antidepressivum; Kombination bei stärkerer Einschränkung erwägen", "children": [] }
+              ]
+            },
+            {
+              "content": "schwere Depression",
+              "children": [
+                { "content": "Psychotherapie + Antidepressivum anbieten; fachpsychiatrisch mitbehandeln", "children": [] },
+                { "content": "stationäre Behandlung bei Suizidalität, psychotischen Symptomen, schwerer Selbstvernachlässigung prüfen", "children": [] }
+              ]
+            },
+            {
+              "content": "psychotische / therapieresistente / vital bedrohliche Depression",
+              "children": [
+                { "content": "Antidepressivum + Antipsychotikum, meist stationär", "children": [] },
+                { "content": "EKT frühzeitig erwägen", "children": [] }
+              ]
+            },
+            {
+              "content": "immer beachten",
+              "children": [
+                { "content": "Suizidalität aktiv erfragen", "children": [] },
+                { "content": "frühere Manie/Hypomanie wegen Switch-Risiko erfragen", "children": [] },
+                { "content": "organische Ursachen, Substanzen und Medikamente ausschließen", "children": [] }
+              ]
+            }
+          ]
+        },
+        {
+          "content": "Angststörungen / Panik / Agoraphobie / soziale Phobie",
+          "children": [
+            { "content": "somatische Notfälle und Differenzialdiagnosen ausschließen: ACS, Lungenembolie, Arrhythmie, Hyperthyreose, Hypoglykämie, Intoxikation/Entzug", "children": [] },
+            { "content": "Akut: ernst nehmen, Sicherheit vermitteln, ruhige Umgebung, Atemtechnik, Psychoedukation", "children": [] },
+            { "content": "Langzeit: KVT und Exposition; SSRI/SNRI bei Bedarf; Benzodiazepine nur kurzfristig", "children": [] },
+            { "content": "komorbide Depression, Sucht und Vermeidungsverhalten aktiv behandeln", "children": [] }
+          ]
+        },
+        {
+          "content": "Zwangsstörung",
+          "children": [
+            { "content": "Therapie der Wahl: störungsspezifische KVT mit Exposition und Reaktionsmanagement", "children": [] },
+            { "content": "SSRI oder Clomipramin bei Bedarf; oft höhere Dosis und längere Behandlungsdauer als Depression", "children": [] },
+            { "content": "Kombination Psychotherapie + Pharmakotherapie bei schwerer Symptomatik, Komorbidität oder unzureichender Wirkung", "children": [] },
+            { "content": "Angehörige einbeziehen, wenn sie Rituale verstärken; Rückfallprophylaxe planen", "children": [] }
+          ]
+        },
+        {
+          "content": "PTBS / Traumafolgestörungen",
+          "children": [
+            { "content": "zuerst Sicherheit, Stabilisierung, Schlaf, Substanzkonsum, Suizidalität und aktuelle Gewalt klären", "children": [] },
+            { "content": "Therapie der Wahl: traumafokussierte Psychotherapie; EMDR möglich", "children": [] },
+            { "content": "SSRI wie Sertralin/Paroxetin oder Venlafaxin bei Bedarf und Komorbidität erwägen", "children": [] },
+            { "content": "Benzodiazepine nicht als Dauertherapie", "children": [] }
+          ]
+        },
+        {
+          "content": "Somatoforme / funktionelle / psychosomatische Beschwerden",
+          "children": [
+            { "content": "Beschwerden validieren: real, nicht eingebildet; nicht sagen: „Sie haben nichts“", "children": [] },
+            { "content": "gefährliche organische Ursachen und Red Flags ausschließen, Vorbefunde sichten", "children": [] },
+            { "content": "biopsychosoziales Modell, feste regelmäßige Termine, Aktivierung, Schlaf, Stressreduktion, Entspannung", "children": [] },
+            { "content": "Psychotherapie; komorbide Depression/Angst behandeln; Opioide/NSAR nicht unkritisch langfristig", "children": [] }
+          ]
+        },
+        {
+          "content": "Dissoziative Störungen / funktionelle neurologische Symptome",
+          "children": [
+            { "content": "neurologische Notfälle, Epilepsie, Intoxikation und somatische Ursachen ausschließen", "children": [] },
+            { "content": "keine Simulation unterstellen; wertschätzende Erklärung und klare Diagnosekommunikation", "children": [] },
+            { "content": "Stabilisierung, Psychotherapie, Psychoedukation; Physio-/Ergotherapie bei Funktionsausfällen", "children": [] }
+          ]
+        },
+        {
+          "content": "Essstörungen",
+          "children": [
+            {
+              "content": "Anorexia nervosa",
+              "children": [
+                { "content": "medizinische Stabilisierung, Ernährungsaufbau, Gewichtszunahmeziele, Psychotherapie", "children": [] },
+                { "content": "Familie bei Jugendlichen einbeziehen; stationär bei schwerem Untergewicht, Elektrolytstörung, Suizidalität", "children": [] }
+              ]
+            },
+            {
+              "content": "Refeeding-Risiko",
+              "children": [
+                { "content": "langsamer Aufbau, Phosphat/Kalium/Magnesium, Thiamin, Bilanzierung, EKG", "children": [] }
+              ]
+            },
+            {
+              "content": "Bulimia nervosa",
+              "children": [
+                { "content": "KVT, Mahlzeitenstruktur, Elektrolyte kontrollieren, Erbrechen/Laxanzien erfassen", "children": [] },
+                { "content": "Fluoxetin kann ergänzend helfen", "children": [] }
+              ]
+            },
+            {
+              "content": "Binge-Eating-Störung",
+              "children": [
+                { "content": "KVT, regelmäßiges Essen, Umgang mit Auslösern, Selbstwert, Komorbiditäten", "children": [] }
+              ]
+            }
+          ]
+        },
+        {
+          "content": "Substanzbezogene Störungen",
+          "children": [
+            { "content": "Motivierende Gesprächsführung, Schadensminderung, Rückfallprophylaxe, Suchthilfe, Selbsthilfe", "children": [] },
+            { "content": "Alkohol: Screening, Entzugsrisiko, qualifizierte Entzugsbehandlung, Thiamin, somatische Komorbidität", "children": [] },
+            { "content": "Benzodiazepine/Z-Substanzen: langsames Ausschleichen, Entzugssymptome, nicht abrupt absetzen", "children": [] },
+            { "content": "Opioide: Substitution prüfen, Überdosierungsprävention, Naloxon-Schulung je nach Setting", "children": [] }
+          ]
+        },
+        {
+          "content": "Manie / bipolare Störung",
+          "children": [
+            { "content": "akut: Gefährdung, Schlafentzug, Substanzen und organische Ursachen prüfen; oft stationär", "children": [] },
+            { "content": "Reizreduktion, Schlaf-Wach-Rhythmus stabilisieren, Psychoedukation", "children": [] },
+            { "content": "Antipsychotikum und/oder Stimmungsstabilisierer; Benzodiazepin nur kurzfristig bei starker Erregung", "children": [] },
+            { "content": "langfristig: Lithium/Phasenprophylaxe, Rückfallzeichen, Krisenplan; Antidepressiva vorsichtig wegen Switch-Risiko", "children": [] }
+          ]
+        },
+        {
+          "content": "Psychose / Schizophrenie",
+          "children": [
+            { "content": "zuerst: organische Psychose, Substanzen, Delir und affektive Psychose abgrenzen", "children": [] },
+            { "content": "Akut: Antipsychotikum, Deeskalation, Reizreduktion, Schlaf, Einbezug von Angehörigen", "children": [] },
+            { "content": "Psychotherapie, Psychoedukation, Familienintervention, Rückfallprophylaxe, Frühwarnzeichen", "children": [] },
+            { "content": "psychosozial: Ergotherapie, Arbeit/Wohnen, Soziotherapie, Teilhabe und Recovery-Orientierung", "children": [] },
+            { "content": "Therapieresistenz: Clozapin prüfen; Blutbildkontrollen, metabolische Risiken und Suizidalität beachten", "children": [] }
+          ]
+        },
+        {
+          "content": "Delir / Demenz / organische psychische Störungen",
+          "children": [
+            {
+              "content": "Delir",
+              "children": [
+                { "content": "Ursache behandeln, Reorientierung, Brille/Hörgerät, Schlaf-Wach-Rhythmus, Mobilisation, Hydratation", "children": [] },
+                { "content": "Elektrolyte korrigieren, anticholinerge/unnötige Medikamente reduzieren", "children": [] },
+                { "content": "Antipsychotikum nur bei Gefährdung oder schwerer Agitation und so kurz wie möglich", "children": [] }
+              ]
+            },
+            {
+              "content": "Demenz",
+              "children": [
+                { "content": "reversible Faktoren prüfen, Aufklärung, Angehörige, Pflege/Betreuung, Tagesstruktur, Sicherheit", "children": [] },
+                { "content": "Antidementiva und neue Anti-Amyloid-Therapien nur demenzform-, stadiums- und zulassungsbezogen prüfen", "children": [] },
+                { "content": "herausforderndes Verhalten zuerst nicht-medikamentös behandeln", "children": [] }
+              ]
+            }
+          ]
+        },
+        {
+          "content": "Schlafstörungen / Insomnie",
+          "children": [
+            { "content": "Diagnostik: Schlafanamnese, Schlaftagebuch, Depression/Angst/PTBS/Substanzen/Medikamente/Schlafapnoe prüfen", "children": [] },
+            { "content": "KVT-I als erste Behandlungsoption bei Insomnie", "children": [] },
+            { "content": "Schlafhygiene allein meist nicht ausreichend, aber als Baustein sinnvoll", "children": [] },
+            { "content": "Benzodiazepine/Z-Substanzen nur kurzfristig; Abhängigkeit, Sturz und Verwirrtheit beachten", "children": [] }
+          ]
+        },
+        {
+          "content": "Persönlichkeitsstörungen / Borderline",
+          "children": [
+            { "content": "störungsspezifische Psychotherapie mit klarer Struktur und Krisenplan", "children": [] },
+            { "content": "DBT, MBT, Schematherapie oder TFP je nach Setting und Verfügbarkeit", "children": [] },
+            { "content": "Ziele: Emotionsregulation, Selbstverletzung, Suizidalität, Impulsivität, Beziehungsmuster, Funktionsniveau", "children": [] },
+            { "content": "Medikamente nicht als alleinige Kerntherapie; Komorbiditäten gezielt behandeln", "children": [] }
+          ]
+        }
+      ]
+    },
+    {
+      "content": "G. Setting und Schnittstellen",
+      "children": [
+        {
+          "content": "Ambulant",
+          "children": [
+            { "content": "stabil, keine akute Gefährdung, tragfähige Unterstützung, ausreichende Termine", "children": [] }
+          ]
+        },
+        {
+          "content": "Tagesklinik",
+          "children": [
+            { "content": "mehr Struktur und Intensität, aber Patient schläft zu Hause", "children": [] }
+          ]
+        },
+        {
+          "content": "Stationär",
+          "children": [
+            { "content": "schwere Symptomatik, Krisenintervention, Diagnostik, Medikamentenumstellung, Ess-/Entzugskomplikationen", "children": [] }
+          ]
+        },
+        {
+          "content": "Geschützt stationär",
+          "children": [
+            { "content": "akute Suizidalität, Fremdgefährdung, fehlende Absprachefähigkeit, schweres Delir/Manie/Psychose, schwere Selbstvernachlässigung", "children": [] }
+          ]
+        },
+        {
+          "content": "Nachsorge",
+          "children": [
+            { "content": "Arztbrief, Medikationsplan, Krisenplan, Psychotherapie/PIA/Soziotherapie, Hausarzt/Facharzt, Selbsthilfe", "children": [] }
+          ]
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<script>
+(()=>{"use strict";
+
+const DATA=JSON.parse(document.getElementById("mindmap-data").textContent);
+const KEY="therapie-search-mindmap-theme";
+
+const $=id=>document.getElementById(id);
+const badge=$("badge");
+const msg=$("msg");
+const full=$("full");
+const overview=$("overview");
+const theme=$("theme");
+const search=$("search");
+const searchBtn=$("searchBtn");
+const clearSearch=$("clearSearch");
+
+let mm=null;
+let toolbarEl=null;
+let currentZoom=1;
+let activeView="overview";
+let currentSearchRaw="";
+let suppressSyntheticClick=false;
+const searchFullPaths=new Set();
+const searchCollapsedPaths=new Set();
+
+const clone=o=>JSON.parse(JSON.stringify(o));
+const count=n=>1+(n.children||[]).reduce((s,c)=>s+count(c),0);
+const pathKey=path=>Array.isArray(path)?path.join("."):String(path??"");
+
+const stripHtml=s=>{
+  const tmp=document.createElement("div");
+  tmp.innerHTML=String(s||"");
+  return tmp.textContent||tmp.innerText||"";
+};
+
+const norm=s=>stripHtml(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+
+const pref=()=>{
+  const saved=localStorage.getItem(KEY);
+  return saved==="light"||saved==="dark" ? saved : "dark";
+};
+
+const apply=(t,save=true)=>{
+  t=t==="dark" ? "dark" : "light";
+  document.documentElement.dataset.theme=t;
+  document.documentElement.classList.toggle("markmap-dark",t==="dark");
+  if(save) localStorage.setItem(KEY,t);
+
+  theme.textContent=t==="dark" ? "☀ Hell" : "☾ Dunkel";
+  theme.setAttribute("aria-label",t==="dark" ? "Zum hellen Modus wechseln" : "Zum dunklen Modus wechseln");
+
+  const tbTheme=document.querySelector("#toolbarTheme");
+  if(tbTheme){
+    tbTheme.textContent=t==="dark" ? "☀" : "☾";
+    tbTheme.title="Hell/Dunkel wechseln";
+    tbTheme.setAttribute("aria-label","Hell/Dunkel wechseln");
+  }
+};
+
+const toggle=()=>apply(document.documentElement.dataset.theme==="dark" ? "light" : "dark");
+
+const setBadge=text=>{
+  const span=badge.querySelector("span:last-child");
+  if(span) span.textContent=text;
+};
+
+const setActive=view=>{
+  full.classList.toggle("active",view==="full");
+  overview.classList.toggle("active",view==="overview");
+};
+
+const show=text=>{
+  msg.textContent=text;
+  msg.classList.add("on");
+  clearTimeout(show.timer);
+  show.timer=setTimeout(()=>msg.classList.remove("on"),3200);
+};
+
+const fit=(delay=80)=>setTimeout(()=>{
+  try{
+    if(mm&&typeof mm.fit==="function") mm.fit();
+    currentZoom=1;
+  }catch(e){console.warn("Fit failed",e);}
+},delay);
+
+const rescale=ratio=>{
+  try{
+    if(mm&&typeof mm.rescale==="function"){
+      currentZoom*=ratio;
+      mm.rescale(currentZoom);
+      return;
+    }
+  }catch(e){console.warn("rescale failed",e);}
+
+  const g=document.querySelector("#mindmap>g");
+  if(!g) return;
+  currentZoom*=ratio;
+  const tr=g.getAttribute("transform")||"translate(0,0) scale(1)";
+  const t=tr.match(/translate\(([^)]*)\)/)?.[0]||"translate(0,0)";
+  g.setAttribute("transform",`${t} scale(${currentZoom})`);
+};
+
+const datumData=d=>(d&&d.data&&typeof d.data==="object") ? d.data : d;
+const getPathFromDatum=d=>{
+  const data=datumData(d);
+  return data&&Object.prototype.hasOwnProperty.call(data,"__path") ? String(data.__path) : "";
+};
+const getPath=(d,nodeEl)=>{
+  const fromDatum=getPathFromDatum(d);
+  if(fromDatum!=="") return fromDatum;
+  if(nodeEl&&nodeEl.hasAttribute&&nodeEl.hasAttribute("data-original-path")) return nodeEl.getAttribute("data-original-path")||"";
+  return fromDatum;
+};
+
+function findOriginalByPath(path){
+  const p=String(path??"");
+  if(!p) return DATA;
+  let node=DATA;
+  for(const part of p.split(".")){
+    if(part==="") continue;
+    const idx=Number(part);
+    if(!Number.isInteger(idx)||!node.children||!node.children[idx]) return null;
+    node=node.children[idx];
+  }
+  return node;
+}
+
+const hasVisibleChildren=d=>!!(d&&((d.children&&d.children.length)||(d._children&&d._children.length)));
+const hasOriginalChildren=(d,nodeEl)=>{
+  const original=findOriginalByPath(getPath(d,nodeEl));
+  return !!(original&&original.children&&original.children.length);
+};
+const isSearchMode=()=>activeView==="search"&&!!search.value.trim();
+const canToggleNode=(d,nodeEl)=>hasVisibleChildren(d)||(isSearchMode()&&hasOriginalChildren(d,nodeEl));
+
+function cloneShallowWithPath(node,path){
+  const copy={...node};
+  if(node.payload&&typeof node.payload==="object") copy.payload={...node.payload};
+  copy.__path=pathKey(path);
+  copy.children=[];
+  return copy;
+}
+
+function addPaths(node,path=[]){
+  const copy=cloneShallowWithPath(node,path);
+  copy.children=(node.children||[]).map((child,i)=>addPaths(child,path.concat(i)));
+  return copy;
+}
+
+function fullSubtreeForSearch(node,path=[]){
+  const p=pathKey(path);
+  const copy=cloneShallowWithPath(node,path);
+  if(searchCollapsedPaths.has(p)){
+    copy.children=[];
+    return copy;
+  }
+  copy.children=(node.children||[]).map((child,i)=>fullSubtreeForSearch(child,path.concat(i)));
+  return copy;
+}
+
+function subtreeHasMatch(node,q){
+  return norm(node.content).includes(q)||(node.children||[]).some(child=>subtreeHasMatch(child,q));
+}
+
+function filterTree(node,q,path=[]){
+  const p=pathKey(path);
+  const ownMatch=norm(node.content).includes(q);
+
+  if(searchCollapsedPaths.has(p)){
+    // Keep the clicked node visible if it is itself a match OR if it contains a match,
+    // but hide all original children/subcategories under it.
+    if(path.length===0||subtreeHasMatch(node,q)||searchFullPaths.has(p)) return cloneShallowWithPath(node,path);
+    return null;
+  }
+
+  if(searchFullPaths.has(p)){
+    return fullSubtreeForSearch(node,path);
+  }
+
+  const childMatches=(node.children||[])
+    .map((child,i)=>filterTree(child,q,path.concat(i)))
+    .filter(Boolean);
+
+  if(ownMatch&&path.length>0){
+    return fullSubtreeForSearch(node,path);
+  }
+
+  if(childMatches.length||path.length===0){
+    const copy=cloneShallowWithPath(node,path);
+    copy.children=childMatches;
+    return copy;
+  }
+
+  return null;
+}
+
+function prepareForRender(data){
+  return data&&Object.prototype.hasOwnProperty.call(data,"__path") ? clone(data) : addPaths(data);
+}
+
+function getImmediateChildrenFromDatum(d){
+  const data=datumData(d);
+  return Array.isArray(data&&data.children) ? data.children : [];
+}
+
+function isRenderedAsFullOriginal(d,path){
+  const original=findOriginalByPath(path);
+  if(!original||!Array.isArray(original.children)) return false;
+  const renderedChildren=getImmediateChildrenFromDatum(d);
+  if(renderedChildren.length!==original.children.length) return false;
+  return original.children.every((child,i)=>renderedChildren[i]&&renderedChildren[i].content===child.content);
+}
+
+function closestMarkmapNode(target){
+  const svg=$("mindmap");
+  let el=target instanceof Element ? target : null;
+  while(el&&el!==document&&el!==svg.parentNode){
+    if(el.matches&&el.matches("g.markmap-node")) return el;
+    el=el.parentNode instanceof Element ? el.parentNode : null;
+  }
+  return null;
+}
+
+const markClickableNodes=()=>{
+  document.querySelectorAll("#mindmap g.markmap-node").forEach(g=>{
+    const path=getPath(g.__data__,g);
+    g.setAttribute("data-original-path",path);
+    const clickable=canToggleNode(g.__data__,g);
+    g.classList.toggle("markmap-clickable",clickable);
+    g.style.cursor="default";
+    g.querySelectorAll("line").forEach(el=>{
+      el.style.cursor="default";
+    });
+    g.querySelectorAll("circle").forEach(el=>{
+      el.style.cursor=clickable ? "pointer" : "default";
+      if(clickable) el.setAttribute("title","Klicken zum Ein-/Ausklappen");
+      else el.removeAttribute("title");
+    });
+    g.querySelectorAll(".markmap-foreign,.markmap-foreign *").forEach(el=>{
+      el.style.cursor="text";
+      el.style.userSelect="text";
+      el.style.webkitUserSelect="text";
+    });
+    const fo=g.querySelector(".markmap-foreign");
+    if(fo){
+      fo.removeAttribute("title");
+      fo.style.cursor="text";
+      fo.style.userSelect="text";
+      fo.style.webkitUserSelect="text";
+      if(!fo.dataset.textSelectionBound){
+        fo.dataset.textSelectionBound="1";
+        ["mousedown","mouseup","click","dblclick","pointerdown","pointerup"].forEach(type=>{
+          fo.addEventListener(type,ev=>{
+            // Let the browser select text normally, but do not let the event reach
+            // Markmap zoom/pan or node-toggle handlers.
+            ev.stopPropagation();
+          });
+        });
+      }
+    }
+  });
+};
+
+const afterRender=()=>{
+  markClickableNodes();
+  setTimeout(markClickableNodes,80);
+  setTimeout(markClickableNodes,520);
+  setTimeout(removeDefaultMarkmapToolbar,0);
+  setTimeout(removeDefaultMarkmapToolbar,300);
+};
+
+function removeDefaultMarkmapToolbar(){
+  document.querySelectorAll(".mm-toolbar,.markmap-toolbar,.mm-toolbar-brand").forEach(el=>el.remove());
+}
+
+function removeCustomToolbar(){
+  if(toolbarEl&&toolbarEl.parentNode) toolbarEl.parentNode.removeChild(toolbarEl);
+  toolbarEl=null;
+}
+
+function toolButton(text,title,handler,id){
+  const b=document.createElement("button");
+  b.type="button";
+  b.className="toolbtn";
+  b.textContent=text;
+  b.title=title;
+  b.setAttribute("aria-label",title);
+  if(id) b.id=id;
+  b.addEventListener("click",handler);
+  return b;
+}
+
+function makeToolbar(){
+  removeCustomToolbar();
+  toolbarEl=document.createElement("div");
+  toolbarEl.className="custom-toolbar";
+  toolbarEl.setAttribute("aria-label","Mindmap-Werkzeugleiste");
+
+  const brand=document.createElement("span");
+  brand.className="toolbar-brand";
+  brand.textContent="Lernmap";
+
+  toolbarEl.append(
+    brand,
+    toolButton("+","Vergrößern",()=>rescale(1.18)),
+    toolButton("−","Verkleinern",()=>rescale(.85)),
+    toolButton("⛶","An Fenster anpassen",()=>fit(0)),
+    toolButton("◎","Überblick",()=>{
+      search.value="";
+      resetSearchState();
+      renderMap(DATA,"Überblick · Hauptbereiche sichtbar · Kreis anklicken zum Öffnen · Text ist auswählbar","overview",2);
+    }),
+    toolButton("↕","Alles aufklappen",()=>{
+      search.value="";
+      resetSearchState();
+      renderMap(DATA,`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`,"full",-1);
+    }),
+    toolButton(document.documentElement.dataset.theme==="dark" ? "☀" : "☾","Hell/Dunkel wechseln",()=>toggle(),"toolbarTheme")
+  );
+
+  document.body.appendChild(toolbarEl);
+}
+
+function resetSearchState(){
+  currentSearchRaw="";
+  searchFullPaths.clear();
+  searchCollapsedPaths.clear();
+}
+
+function rerenderCurrentSearch(doFit=true){
+  const raw=search.value.trim();
+  const result=filterTree(DATA,norm(raw));
+  if(!result||!result.children){
+    return false;
+  }
+  renderMap(result,`Suche · Treffer für „${raw}“ · ${count(result)} sichtbare Knoten · Kreis-Klick: ganzer Original-Unterbaum öffnen/schließen`,"search",-1,doFit);
+  return true;
+}
+
+function searchToggleNode(d,nodeEl){
+  const path=getPath(d,nodeEl);
+  const original=findOriginalByPath(path);
+  if(!original||!original.children||!original.children.length) return false;
+
+  const currentlyFull=searchFullPaths.has(path)||(!searchCollapsedPaths.has(path)&&isRenderedAsFullOriginal(d,path));
+
+  if(currentlyFull){
+    searchFullPaths.delete(path);
+    searchCollapsedPaths.add(path);
+  }else{
+    searchCollapsedPaths.delete(path);
+    searchFullPaths.add(path);
+  }
+
+  rerenderCurrentSearch(true);
+  return true;
+}
+
+function toggleNormalMarkmapNode(e,node){
+  const circle=node.querySelector("circle");
+  try{
+    if(circle){
+      suppressSyntheticClick=true;
+      circle.dispatchEvent(new MouseEvent("click",{bubbles:true,cancelable:true,view:window}));
+      suppressSyntheticClick=false;
+    }else if(mm&&typeof mm.handleClick==="function"){
+      mm.handleClick(e,node.__data__);
+    }else if(mm&&typeof mm.toggleNode==="function"){
+      mm.toggleNode(node.__data__,false);
+    }
+  }finally{
+    suppressSyntheticClick=false;
+    afterRender();
+  }
+}
+
+function bindNodeToggle(){
+  const svg=$("mindmap");
+  if(!svg||svg.dataset.nodeToggleBound) return;
+  svg.dataset.nodeToggleBound="1";
+
+  svg.addEventListener("click",e=>{
+    if(suppressSyntheticClick) return;
+
+    // New behavior: only the small circle toggles a node.
+    // The text label remains normal selectable text.
+    const target=e.target instanceof Element ? e.target : null;
+    if(!target || target.tagName.toLowerCase()!=="circle") return;
+
+    const node=closestMarkmapNode(target);
+    if(!node) return;
+
+    const d=node.__data__;
+    if(!canToggleNode(d,node)) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    if(typeof e.stopImmediatePropagation==="function") e.stopImmediatePropagation();
+
+    if(isSearchMode()){
+      if(searchToggleNode(d,node)) return;
+    }
+
+    toggleNormalMarkmapNode(e,node);
+  },true);
+}
+
+function renderMap(data,label,view,initialExpandLevel,doFit=true){
+  if(!window.markmap||!window.d3){
+    show("Markmap konnte nicht geladen werden. Bitte Internetverbindung oder CDN-Zugriff prüfen.");
+    return;
+  }
+
+  activeView=view;
+  setActive(view);
+  setBadge(label);
+  currentZoom=1;
+
+  const svg=document.querySelector("svg#mindmap");
+  svg.innerHTML="";
+  removeDefaultMarkmapToolbar();
+  removeCustomToolbar();
+
+  const {Markmap,deriveOptions}=window.markmap;
+  const options=deriveOptions({
+    autoFit:true,
+    colorFreezeLevel:2,
+    duration:420,
+    initialExpandLevel,
+    maxWidth:360,
+    spacingHorizontal:92,
+    spacingVertical:11
+  });
+
+  mm=Markmap.create("svg#mindmap",options,prepareForRender(data));
+  window.mm=mm;
+  window.therapieMindmapData=DATA;
+  window.lernMindmapData=DATA;
+
+  makeToolbar();
+  afterRender();
+  if(doFit) fit(180);
+}
+
+function searchTree(resetManual=true){
+  const raw=search.value.trim();
+
+  if(!raw){
+    resetSearchState();
+    renderMap(DATA,`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`,"full",-1);
+    return;
+  }
+
+  if(resetManual&&raw!==currentSearchRaw){
+    searchFullPaths.clear();
+    searchCollapsedPaths.clear();
+  }
+  currentSearchRaw=raw;
+
+  const result=filterTree(DATA,norm(raw));
+
+  if(!result||!result.children||result.children.length===0){
+    const empty={
+      content:DATA.content,
+      __path:"",
+      children:[{
+        content:`Keine Treffer für „${raw}“`,
+        __path:"no-result",
+        children:[{content:"Tipp: Suche kürzer, z. B. „Depression“, „SSRI“, „EKT“, „Suizid“, „Psychose" ,__path:"no-result.0",children:[]}]
+      }]
+    };
+    renderMap(empty,`Suche · keine Treffer für „${raw}“`,"search",-1);
+    show(`Keine Treffer für „${raw}“. Versuche ein kürzeres Suchwort.`);
+    return;
+  }
+
+  renderMap(result,`Suche · Treffer für „${raw}“ · ${count(result)} sichtbare Knoten · Kreis-Klick: ganzer Original-Unterbaum öffnen/schließen`,"search",-1);
+}
+
+full.addEventListener("click",()=>{
+  search.value="";
+  resetSearchState();
+  renderMap(DATA,`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`,"full",-1);
+});
+
+overview.addEventListener("click",()=>{
+  search.value="";
+  resetSearchState();
+  renderMap(DATA,"Überblick · Hauptbereiche sichtbar · Kreis anklicken zum Öffnen · Text ist auswählbar","overview",2);
+});
+
+searchBtn.addEventListener("click",()=>searchTree(true));
+
+search.addEventListener("keydown",e=>{
+  if(e.key==="Enter") searchTree(true);
+  if(e.key==="Escape"){
+    search.value="";
+    resetSearchState();
+    renderMap(DATA,`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`,"full",-1);
+  }
+});
+
+let searchTimer;
+search.addEventListener("input",()=>{
+  clearTimeout(searchTimer);
+  searchTimer=setTimeout(()=>searchTree(true),260);
+});
+
+clearSearch.addEventListener("click",()=>{
+  search.value="";
+  resetSearchState();
+  renderMap(DATA,`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`,"full",-1);
+  search.focus();
+});
+
+theme.addEventListener("click",toggle);
+window.addEventListener("resize",()=>fit(160));
+
+apply(pref(),false);
+bindNodeToggle();
+
+window.addEventListener("load",()=>{
+  renderMap(DATA,"Überblick · Hauptbereiche sichtbar · Kreis anklicken zum Öffnen · Text ist auswählbar","overview",2);
+});
+
+})();
+
+</script></body></html>
