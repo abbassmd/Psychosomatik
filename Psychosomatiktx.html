@@ -1,932 +1,541 @@
 <!doctype html>
-<html lang="de" data-theme="light">
+<html lang="de" data-theme="dark" class="markmap-dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="color-scheme" content="light dark">
-  <title>Psychiatrie / Psychosomatik – Allgemeine Therapie-Methoden</title>
-
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.18.12/dist/style.css">
-
-  <style>
-    :root {
-      --bg: #f6f8fb;
-      --map: #fbfcff;
-      --panel: rgba(255,255,255,.93);
-      --solid: #fff;
-      --text: #0f172a;
-      --muted: #475569;
-      --border: rgba(15,23,42,.13);
-      --shadow: 0 18px 50px rgba(15,23,42,.14);
-      --accent: #2563eb;
-      --accent2: #7c3aed;
-      --soft: rgba(37,99,235,.11);
-      --branch: rgba(37,99,235,.45);
-      --node: #fff;
-      --nodeStroke: rgba(37,99,235,.32);
-      --head: 86px;
-    }
-
-    html[data-theme=dark] {
-      --bg: #0b1120;
-      --map: #0f172a;
-      --panel: rgba(15,23,42,.9);
-      --solid: #111827;
-      --text: #e5e7eb;
-      --muted: #a7b2c4;
-      --border: rgba(226,232,240,.16);
-      --shadow: 0 18px 55px rgba(0,0,0,.42);
-      --accent: #60a5fa;
-      --accent2: #a78bfa;
-      --soft: rgba(96,165,250,.16);
-      --branch: rgba(147,197,253,.48);
-      --node: #111827;
-      --nodeStroke: rgba(147,197,253,.35);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      overflow: hidden;
-      background: var(--bg);
-      color: var(--text);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
-    .top {
-      position: fixed;
-      z-index: 20;
-      top: 14px;
-      left: 14px;
-      right: 14px;
-      display: grid;
-      grid-template-columns: minmax(250px,1fr) auto;
-      gap: 16px;
-      align-items: center;
-      min-height: 70px;
-      padding: 14px 16px;
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      background: var(--panel);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      min-width: 0;
-    }
-
-    .logo {
-      display: grid;
-      place-items: center;
-      width: 42px;
-      height: 42px;
-      flex: 0 0 auto;
-      border-radius: 16px;
-      background: linear-gradient(135deg,var(--accent),var(--accent2));
-      color: #fff;
-      font-weight: 900;
-      box-shadow: 0 10px 28px rgba(37,99,235,.26);
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(17px,2.3vw,24px);
-      line-height: 1.05;
-      letter-spacing: -.03em;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .sub {
-      margin-top: 5px;
-      color: var(--muted);
-      font-size: 12px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .group {
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-      padding: 4px;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      background: var(--soft);
-    }
-
-    button,
-    select {
-      font: inherit;
-    }
-
-    .btn,
-    .sel,
-    .toolbar-theme {
-      min-height: 36px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: var(--solid);
-      color: var(--text);
-      font-weight: 750;
-      cursor: pointer;
-    }
-
-    .btn {
-      padding: 0 12px;
-      transition: .14s;
-    }
-
-    .btn:hover {
-      color: var(--accent);
-      transform: translateY(-1px);
-    }
-
-    .btn.active {
-      border-color: transparent;
-      background: var(--accent);
-      color: #fff;
-    }
-
-    .sel {
-      max-width: 280px;
-      padding: 0 34px 0 12px;
-      outline: 0;
-    }
-
-    .btn:focus-visible,
-    .sel:focus,
-    .toolbar-theme:focus-visible {
-      outline: 3px solid var(--soft);
-      outline-offset: 2px;
-    }
-
-    .shell {
-      position: fixed;
-      inset: 0;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at top left,var(--soft),transparent 32%),
-        radial-gradient(circle at bottom right,rgba(124,58,237,.13),transparent 36%),
-        var(--map);
-    }
-
-    #mindmap {
-      display: block;
-      width: 100vw;
-      height: 100vh;
-      padding-top: var(--head);
-      background: transparent;
-      cursor: grab;
-    }
-
-    #mindmap:active {
-      cursor: grabbing;
-    }
-
-    #mindmap text {
-      fill: var(--text) !important;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
-      font-size: 15px !important;
-      font-weight: 650 !important;
-      letter-spacing: -.01em;
-    }
-
-    #mindmap g.markmap-node > circle {
-      fill: var(--node) !important;
-      stroke: var(--nodeStroke) !important;
-      stroke-width: 1.6px !important;
-    }
-
-    #mindmap path.markmap-link {
-      stroke: var(--branch) !important;
-      stroke-width: 1.8px !important;
-    }
-
-    .badge {
-      position: fixed;
-      z-index: 12;
-      left: 22px;
-      bottom: 24px;
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-      max-width: min(540px,calc(100vw - 220px));
-      padding: 10px 13px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      background: var(--panel);
-      box-shadow: 0 10px 28px rgba(15,23,42,.12);
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 750;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-    }
-
-    .dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 0 4px var(--soft);
-    }
-
-    .study-toolbar,
-    .markmap-toolbar {
-      z-index: 30 !important;
-      border: 1px solid var(--border) !important;
-      border-radius: 18px !important;
-      background: var(--panel) !important;
-      box-shadow: var(--shadow) !important;
-      color: var(--text) !important;
-      backdrop-filter: blur(18px) !important;
-      -webkit-backdrop-filter: blur(18px) !important;
-    }
-
-    .markmap-toolbar a[href*=markmap],
-    .markmap-toolbar a[title*=markmap],
-    .markmap-toolbar a[aria-label*=markmap] {
-      display: none !important;
-      pointer-events: none !important;
-    }
-
-    .markmap-toolbar svg,
-    .markmap-toolbar button,
-    .markmap-toolbar a {
-      color: var(--text) !important;
-      fill: currentColor !important;
-    }
-
-    .toolbar-brand {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 32px;
-      margin: 4px 6px 4px 4px;
-      padding: 0 11px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: var(--soft);
-      color: var(--accent);
-      font-size: 12px;
-      font-weight: 850;
-      text-decoration: none;
-      white-space: nowrap;
-      user-select: none;
-    }
-
-    .toolbar-theme {
-      min-width: 36px;
-      min-height: 32px;
-      margin: 4px 4px 4px 6px;
-      padding: 0 10px;
-      font-size: 13px;
-      font-weight: 850;
-    }
-
-    .msg {
-      position: fixed;
-      z-index: 40;
-      top: 100px;
-      left: 50%;
-      display: none;
-      max-width: min(720px,calc(100vw - 28px));
-      padding: 12px 14px;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      background: var(--solid);
-      color: var(--text);
-      box-shadow: var(--shadow);
-      font-size: 13px;
-      line-height: 1.35;
-      transform: translateX(-50%);
-    }
-
-    .msg.on {
-      display: block;
-    }
-
-    @media(max-width:980px) {
-      .top {
-        grid-template-columns: 1fr;
-      }
-
-      .controls {
-        justify-content: flex-start;
-      }
-
-      .badge {
-        max-width: calc(100vw - 32px);
-        bottom: 92px;
-      }
-    }
-
-    @media(max-width:640px) {
-      :root {
-        --head: 154px;
-      }
-
-      .top {
-        top: 8px;
-        left: 8px;
-        right: 8px;
-        padding: 12px;
-        border-radius: 20px;
-      }
-
-      .sub {
-        white-space: normal;
-      }
-
-      .controls,
-      .group {
-        width: 100%;
-      }
-
-      .group {
-        flex-wrap: wrap;
-      }
-
-      .btn,
-      .sel {
-        flex: 1 1 auto;
-      }
-
-      .sel {
-        max-width: none;
-      }
-    }
-  </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="ie=edge"><meta name="color-scheme" content="light dark">
+<title>Psychiatrie / Psychosomatik – Allgemeine Therapie-Methoden</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.18.12/dist/style.css">
+<style>
+:root{--bg:#f6f8fb;--map:#fbfcff;--panel:rgba(255,255,255,.93);--solid:#fff;--text:#0f172a;--muted:#475569;--border:rgba(15,23,42,.13);--shadow:0 18px 50px rgba(15,23,42,.14);--accent:#2563eb;--accent2:#7c3aed;--soft:rgba(37,99,235,.11);--branch:rgba(37,99,235,.45);--node:#fff;--nodeStroke:rgba(37,99,235,.32);--head:86px}html[data-theme=dark]{--bg:#0b1120;--map:#0f172a;--panel:rgba(15,23,42,.9);--solid:#111827;--text:#e5e7eb;--muted:#a7b2c4;--border:rgba(226,232,240,.16);--shadow:0 18px 55px rgba(0,0,0,.42);--accent:#60a5fa;--accent2:#a78bfa;--soft:rgba(96,165,250,.16);--branch:rgba(147,197,253,.48);--node:#111827;--nodeStroke:rgba(147,197,253,.35)}*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.top{position:fixed;z-index:20;top:14px;left:14px;right:14px;display:grid;grid-template-columns:minmax(250px,1fr) auto;gap:16px;align-items:center;min-height:70px;padding:14px 16px;border:1px solid var(--border);border-radius:24px;background:var(--panel);box-shadow:var(--shadow);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}.brand{display:flex;align-items:center;gap:12px;min-width:0}.logo{display:grid;place-items:center;width:42px;height:42px;flex:0 0 auto;border-radius:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:900;box-shadow:0 10px 28px rgba(37,99,235,.26)}h1{margin:0;font-size:clamp(17px,2.3vw,24px);line-height:1.05;letter-spacing:-.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sub{margin-top:5px;color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.controls{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;align-items:center}.group{display:inline-flex;gap:8px;align-items:center;padding:4px;border:1px solid var(--border);border-radius:16px;background:var(--soft)}button,select{font:inherit}.btn,.sel,.toolbar-theme{min-height:36px;border:1px solid var(--border);border-radius:12px;background:var(--solid);color:var(--text);font-weight:750;cursor:pointer}.btn{padding:0 12px;transition:.14s}.btn:hover{color:var(--accent);transform:translateY(-1px)}.btn.active{border-color:transparent;background:var(--accent);color:#fff}.sel{max-width:280px;padding:0 34px 0 12px;outline:0}.btn:focus-visible,.sel:focus,.toolbar-theme:focus-visible{outline:3px solid var(--soft);outline-offset:2px}.shell{position:fixed;inset:0;overflow:hidden;background:radial-gradient(circle at top left,var(--soft),transparent 32%),radial-gradient(circle at bottom right,rgba(124,58,237,.13),transparent 36%),var(--map)}#mindmap{display:block;width:100vw;height:100vh;padding-top:var(--head);background:transparent;cursor:grab}#mindmap:active{cursor:grabbing}#mindmap text{fill:var(--text)!important;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;font-size:15px!important;font-weight:650!important;letter-spacing:-.01em}#mindmap g.markmap-node>circle{fill:var(--node)!important;stroke:var(--nodeStroke)!important;stroke-width:1.6px!important}#mindmap path.markmap-link{stroke:var(--branch)!important;stroke-width:1.8px!important}.badge{position:fixed;z-index:12;left:22px;bottom:24px;display:inline-flex;gap:8px;align-items:center;max-width:min(540px,calc(100vw - 220px));padding:10px 13px;border:1px solid var(--border);border-radius:999px;background:var(--panel);box-shadow:0 10px 28px rgba(15,23,42,.12);color:var(--muted);font-size:12px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}.dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--soft)}.study-toolbar,.markmap-toolbar{z-index:30!important;border:1px solid var(--border)!important;border-radius:18px!important;background:var(--panel)!important;box-shadow:var(--shadow)!important;color:var(--text)!important;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important}.markmap-toolbar a[href*=markmap],.markmap-toolbar a[title*=markmap],.markmap-toolbar a[aria-label*=markmap]{display:none!important;pointer-events:none!important}.markmap-toolbar svg,.markmap-toolbar button,.markmap-toolbar a{color:var(--text)!important;fill:currentColor!important}.toolbar-brand{display:inline-flex;align-items:center;justify-content:center;min-height:32px;margin:4px 6px 4px 4px;padding:0 11px;border:1px solid var(--border);border-radius:12px;background:var(--soft);color:var(--accent);font-size:12px;font-weight:850;text-decoration:none;white-space:nowrap;user-select:none}.toolbar-theme{min-width:36px;min-height:32px;margin:4px 4px 4px 6px;padding:0 10px;font-size:13px;font-weight:850}.msg{position:fixed;z-index:40;top:100px;left:50%;display:none;max-width:min(720px,calc(100vw - 28px));padding:12px 14px;border:1px solid var(--border);border-radius:16px;background:var(--solid);color:var(--text);box-shadow:var(--shadow);font-size:13px;line-height:1.35;transform:translateX(-50%)}.msg.on{display:block}@media(max-width:980px){.top{grid-template-columns:1fr}.controls{justify-content:flex-start}.badge{max-width:calc(100vw - 32px);bottom:92px}}@media(max-width:640px){:root{--head:154px}.top{top:8px;left:8px;right:8px;padding:12px;border-radius:20px}.sub{white-space:normal}.controls,.group{width:100%}.group{flex-wrap:wrap}.btn,.sel{flex:1 1 auto}.sel{max-width:none}}
+</style>
 </head>
-
 <body>
-  <header class="top" aria-label="Mindmap-Steuerung">
-    <div class="brand">
-      <div class="logo" aria-hidden="true">Ψ</div>
-      <div>
-        <h1>Psychiatrie / Psychosomatik</h1>
-        <div class="sub">Allgemeine Therapie-Methoden · biopsychosozial · multimodal · prüfungsorientiert</div>
-      </div>
-    </div>
+<header class="top" aria-label="Mindmap-Steuerung"><div class="brand"><div class="logo" aria-hidden="true">Ψ</div><div><h1>Psychiatrie / Psychosomatik</h1><div class="sub">Professionelle Lern-Mindmap · Allgemeine Therapie-Methoden · GitHub-Pages-kompatibel</div></div></div><div class="controls"><div class="group" aria-label="Ansicht wählen"><button class="btn active" id="full" type="button" title="Alle Kategorien und Unterpunkte anzeigen">Vollansicht</button><button class="btn" id="overview" type="button" title="Nur Hauptbereiche anzeigen">Überblick</button></div><div class="group" aria-label="Fokusansicht wählen"><select class="sel" id="section" title="Themenbereich auswählen"></select><button class="btn" id="focus" type="button" title="Ausgewählten Bereich anzeigen">Fokus</button></div><button class="btn" id="theme" type="button" title="Hell/Dunkel wechseln" aria-label="Zum hellen Modus wechseln">☀ Hell</button></div></header>
 
-    <div class="controls">
-      <div class="group" aria-label="Ansicht wählen">
-        <button class="btn active" id="full" type="button" title="Alle Kategorien und Unterpunkte anzeigen">Vollansicht</button>
-        <button class="btn" id="overview" type="button" title="Nur Hauptbereiche anzeigen">Überblick</button>
-      </div>
+<main class="shell" aria-label="Mindmap-Fläche"><svg id="mindmap" role="img" aria-label="Psychiatrie und Psychosomatik Therapie Mindmap"></svg></main>
 
-      <div class="group" aria-label="Fokusansicht wählen">
-        <select class="sel" id="section" title="Themenbereich auswählen"></select>
-        <button class="btn" id="focus" type="button" title="Ausgewählten Bereich anzeigen">Fokus</button>
-      </div>
+<div class="badge" id="badge" aria-live="polite"><span class="dot" aria-hidden="true"></span><span>Vollansicht · alle Therapie-Methoden sichtbar</span></div>
+<div class="msg" id="msg" role="status" aria-live="polite"></div>
 
-      <button class="btn" id="theme" type="button" title="Hell/Dunkel wechseln">Theme</button>
-    </div>
-  </header>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18.12/dist/browser/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.18.12/dist/index.js"></script>
 
-  <main class="shell" aria-label="Mindmap-Fläche">
-    <svg id="mindmap" role="img" aria-label="Psychiatrie und Psychosomatik Therapie Mindmap"></svg>
-  </main>
+<script id="mindmap-data" type="application/json">
+{
+  "content": "Psychiatrie / Psychosomatik – Allgemeine Therapie-Methoden",
+  "children": [
+    {
+      "content": "Grundprinzip",
+      "children": [
+        { "content": "Multimodale Therapie", "children": [] },
+        {
+          "content": "Biopsychosoziales Modell",
+          "children": [
+            {
+              "content": "Bio",
+              "children": [
+                { "content": "Körper", "children": [] },
+                { "content": "Gehirn", "children": [] },
+                { "content": "Medikamente", "children": [] },
+                { "content": "Schlaf", "children": [] },
+                { "content": "Schmerzen", "children": [] },
+                { "content": "Substanzen", "children": [] }
+              ]
+            },
+            {
+              "content": "Psycho",
+              "children": [
+                { "content": "Gedanken", "children": [] },
+                { "content": "Gefühle", "children": [] },
+                { "content": "Verhalten", "children": [] },
+                { "content": "Trauma", "children": [] },
+                { "content": "Konflikte", "children": [] }
+              ]
+            },
+            {
+              "content": "Sozial",
+              "children": [
+                { "content": "Familie", "children": [] },
+                { "content": "Arbeit", "children": [] },
+                { "content": "Wohnen", "children": [] },
+                { "content": "Finanzen", "children": [] },
+                { "content": "Unterstützung", "children": [] }
+              ]
+            }
+          ]
+        },
+        {
+          "content": "Kombination mehrerer Methoden",
+          "children": [
+            { "content": "Psychotherapie", "children": [] },
+            { "content": "Psychopharmaka", "children": [] },
+            { "content": "Psychoedukation", "children": [] },
+            { "content": "psychosoziale Unterstützung", "children": [] },
+            { "content": "körperorientierte Verfahren", "children": [] },
+            { "content": "stationäre oder ambulante Behandlung", "children": [] }
+          ]
+        }
+      ]
+    },
+    {
+      "content": "1. Diagnostische Basis vor Therapie",
+      "children": [
+        {
+          "content": "Psychiatrische Anamnese",
+          "children": [
+            { "content": "aktuelle Beschwerden", "children": [] },
+            { "content": "psychiatrische Vorgeschichte", "children": [] },
+            { "content": "somatische Vorgeschichte", "children": [] },
+            { "content": "Medikamentenanamnese", "children": [] },
+            { "content": "Suchtanamnese", "children": [] },
+            { "content": "Familienanamnese", "children": [] },
+            { "content": "Sozialanamnese", "children": [] },
+            { "content": "vegetative Anamnese", "children": [] }
+          ]
+        },
+        {
+          "content": "Psychopathologischer Befund",
+          "children": [
+            { "content": "Bewusstsein", "children": [] },
+            { "content": "Orientierung", "children": [] },
+            { "content": "Aufmerksamkeit und Gedächtnis", "children": [] },
+            { "content": "Denken", "children": [] },
+            { "content": "Wahrnehmung", "children": [] },
+            { "content": "Ich-Störungen", "children": [] },
+            { "content": "Affektivität", "children": [] },
+            { "content": "Antrieb und Psychomotorik", "children": [] },
+            { "content": "Krankheitseinsicht", "children": [] }
+          ]
+        },
+        {
+          "content": "Gefährdungsbeurteilung",
+          "children": [
+            { "content": "Suizidalität", "children": [] },
+            { "content": "Fremdgefährdung", "children": [] },
+            { "content": "Selbstvernachlässigung", "children": [] },
+            { "content": "Absprachefähigkeit", "children": [] }
+          ]
+        },
+        {
+          "content": "Organische Ursachen ausschließen",
+          "children": [
+            { "content": "Delir", "children": [] },
+            { "content": "Intoxikation", "children": [] },
+            { "content": "Entzug", "children": [] },
+            { "content": "neurologische Erkrankung", "children": [] },
+            { "content": "endokrine / metabolische Ursachen", "children": [] },
+            { "content": "Medikamentennebenwirkungen", "children": [] }
+          ]
+        }
+      ]
+    },
+    {
+      "content": "2. Psychoedukation",
+      "children": [
+        { "content": "Patient versteht die Erkrankung", "children": [] },
+        { "content": "Symptome erklären", "children": [] },
+        { "content": "Verlauf erklären", "children": [] },
+        { "content": "Warnzeichen erklären", "children": [] },
+        { "content": "Therapieoptionen erklären", "children": [] },
+        { "content": "Angehörige einbeziehen", "children": [] },
+        { "content": "Rückfallprophylaxe", "children": [] }
+      ]
+    },
+    {
+      "content": "3. Psychotherapeutische Methoden",
+      "children": [
+        {
+          "content": "Kognitive Verhaltenstherapie, KVT",
+          "children": [
+            { "content": "Gedanken erkennen", "children": [] },
+            { "content": "Verhalten verändern", "children": [] },
+            { "content": "Aktivierung", "children": [] },
+            { "content": "Bewältigungsstrategien", "children": [] }
+          ]
+        },
+        {
+          "content": "Exposition",
+          "children": [
+            { "content": "Konfrontation mit Angst oder Vermeidung", "children": [] },
+            { "content": "Vermeidungsverhalten abbauen", "children": [] }
+          ]
+        },
+        {
+          "content": "Psychodynamische Therapie",
+          "children": [
+            { "content": "innere Konflikte", "children": [] },
+            { "content": "Beziehungsmuster", "children": [] },
+            { "content": "biografische Belastungen", "children": [] }
+          ]
+        },
+        {
+          "content": "Tiefenpsychologisch fundierte Therapie",
+          "children": [
+            { "content": "aktuelle Konflikte", "children": [] },
+            { "content": "frühere Beziehungserfahrungen", "children": [] },
+            { "content": "unbewusste Muster", "children": [] }
+          ]
+        },
+        {
+          "content": "Systemische Therapie",
+          "children": [
+            { "content": "Familie", "children": [] },
+            { "content": "Beziehung", "children": [] },
+            { "content": "soziale Systeme", "children": [] }
+          ]
+        },
+        {
+          "content": "Traumatherapie",
+          "children": [
+            { "content": "Stabilisierung", "children": [] },
+            { "content": "Ressourcenaufbau", "children": [] },
+            { "content": "Traumabearbeitung", "children": [] },
+            { "content": "EMDR", "children": [] }
+          ]
+        },
+        {
+          "content": "Supportive Therapie",
+          "children": [
+            { "content": "Stabilisierung", "children": [] },
+            { "content": "Begleitung", "children": [] },
+            { "content": "Krisenbewältigung", "children": [] }
+          ]
+        },
+        {
+          "content": "Gruppentherapie",
+          "children": [
+            { "content": "Austausch", "children": [] },
+            { "content": "soziale Unterstützung", "children": [] },
+            { "content": "Training von Fähigkeiten", "children": [] }
+          ]
+        }
+      ]
+    },
+    {
+      "content": "4. Psychopharmakotherapie",
+      "children": [
+        {
+          "content": "Antidepressiva",
+          "children": [
+            { "content": "SSRI", "children": [] },
+            { "content": "SNRI", "children": [] },
+            { "content": "Mirtazapin", "children": [] },
+            { "content": "trizyklische Antidepressiva", "children": [] }
+          ]
+        },
+        {
+          "content": "Antipsychotika",
+          "children": [
+            { "content": "typische Antipsychotika", "children": [] },
+            { "content": "atypische Antipsychotika", "children": [] }
+          ]
+        },
+        {
+          "content": "Stimmungsstabilisierer",
+          "children": [
+            { "content": "Lithium", "children": [] },
+            { "content": "Antikonvulsiva", "children": [] }
+          ]
+        },
+        {
+          "content": "Anxiolytika und Sedativa",
+          "children": [
+            { "content": "Benzodiazepine nur kurzfristig", "children": [] },
+            { "content": "Z-Substanzen nur kurzfristig", "children": [] }
+          ]
+        },
+        {
+          "content": "Medikamente bei Sucht",
+          "children": [
+            { "content": "Entzugsbehandlung", "children": [] },
+            { "content": "Rückfallprophylaxe", "children": [] }
+          ]
+        },
+        {
+          "content": "Kontrollen",
+          "children": [
+            { "content": "Wirkung", "children": [] },
+            { "content": "Nebenwirkungen", "children": [] },
+            { "content": "Labor", "children": [] },
+            { "content": "EKG", "children": [] },
+            { "content": "Interaktionen", "children": [] },
+            { "content": "Adhärenz", "children": [] }
+          ]
+        }
+      ]
+    },
+    {
+      "content": "5. Somatische / biologische Therapieverfahren",
+      "children": [
+        { "content": "Elektrokonvulsionstherapie, EKT", "children": [] },
+        { "content": "Lichttherapie", "children": [] },
+        { "content": "Schlaf-Wach-Therapie", "children": [] },
+        { "content": "Bewegungs- und Sporttherapie", "children": [] },
+        { "content": "Ergotherapie", "children": [] },
+        { "content": "Physiotherapie", "children": [] },
+        { "content": "Ernährungstherapie", "children": [] },
+        { "content": "Entspannungsverfahren", "children": [] }
+      ]
+    },
+    {
+      "content": "6. Psychosomatische Therapie",
+      "children": [
+        { "content": "Körper und Psyche gemeinsam behandeln", "children": [] },
+        { "content": "Beschwerden ernst nehmen", "children": [] },
+        { "content": "biopsychosoziales Krankheitsmodell erklären", "children": [] },
+        { "content": "Stressreduktion", "children": [] },
+        { "content": "Schmerzbewältigung", "children": [] },
+        { "content": "Schlafhygiene", "children": [] },
+        { "content": "Entspannung", "children": [] },
+        { "content": "Achtsamkeit", "children": [] },
+        { "content": "Körperwahrnehmung", "children": [] },
+        { "content": "Aktivierung", "children": [] },
+        { "content": "feste regelmäßige Termine", "children": [] },
+        { "content": "unnötige Wiederholungsdiagnostik vermeiden", "children": [] }
+      ]
+    },
+    {
+      "content": "7. Sozialpsychiatrische Therapie",
+      "children": [
+        { "content": "Sozialdienst", "children": [] },
+        { "content": "Angehörigenarbeit", "children": [] },
+        { "content": "ambulante psychiatrische Pflege", "children": [] },
+        { "content": "Soziotherapie", "children": [] },
+        { "content": "betreutes Wohnen", "children": [] },
+        { "content": "berufliche Wiedereingliederung", "children": [] },
+        { "content": "Selbsthilfegruppen", "children": [] },
+        { "content": "rechtliche Betreuung bei Bedarf", "children": [] },
+        { "content": "Krisendienst", "children": [] }
+      ]
+    },
+    {
+      "content": "8. Setting der Behandlung",
+      "children": [
+        {
+          "content": "Ambulante Behandlung",
+          "children": [
+            { "content": "Patient stabil", "children": [] },
+            { "content": "keine akute Gefährdung", "children": [] },
+            { "content": "ausreichende Unterstützung", "children": [] }
+          ]
+        },
+        {
+          "content": "Tagesklinik",
+          "children": [
+            { "content": "intensive Behandlung", "children": [] },
+            { "content": "Patient schläft zu Hause", "children": [] }
+          ]
+        },
+        {
+          "content": "Stationäre Behandlung",
+          "children": [
+            { "content": "schwere Symptomatik", "children": [] },
+            { "content": "Diagnostik nötig", "children": [] },
+            { "content": "Krisenintervention", "children": [] }
+          ]
+        },
+        {
+          "content": "Geschützte stationäre Behandlung",
+          "children": [
+            { "content": "akute Suizidalität", "children": [] },
+            { "content": "Fremdgefährdung", "children": [] },
+            { "content": "fehlende Absprachefähigkeit", "children": [] },
+            { "content": "schwere Selbstvernachlässigung", "children": [] }
+          ]
+        }
+      ]
+    },
+    {
+      "content": "9. Therapieziele",
+      "children": [
+        { "content": "Sicherheit herstellen", "children": [] },
+        { "content": "Symptome reduzieren", "children": [] },
+        { "content": "Alltagsfunktion verbessern", "children": [] },
+        { "content": "Krankheit verstehen", "children": [] },
+        { "content": "Rückfälle verhindern", "children": [] },
+        { "content": "soziale Teilhabe verbessern", "children": [] },
+        { "content": "Lebensqualität verbessern", "children": [] },
+        { "content": "Selbstwirksamkeit stärken", "children": [] }
+      ]
+    }
+  ]
+}
+</script>
 
-  <div class="badge" id="badge" aria-live="polite">
-    <span class="dot" aria-hidden="true"></span>
-    <span>Vollansicht · alle Therapie-Methoden sichtbar</span>
-  </div>
+<script>
+(()=>{"use strict";
+const DATA=JSON.parse(document.getElementById("mindmap-data").textContent);
+const KEY="psychosomatik-mindmap-theme";
+const $=id=>document.getElementById(id);
+const badge=$("badge"),msg=$("msg"),section=$("section"),full=$("full"),overview=$("overview"),focus=$("focus"),theme=$("theme");
+let mm,toolbarTheme;
 
-  <div class="msg" id="msg" role="status" aria-live="polite"></div>
+const clone=o=>JSON.parse(JSON.stringify(o));
+const count=n=>1+(n.children||[]).reduce((s,c)=>s+count(c),0);
 
-  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18.12/dist/browser/index.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.18.12/dist/index.js"></script>
+const pref=()=>{
+  const saved=localStorage.getItem(KEY);
+  return saved==="light"||saved==="dark" ? saved : "dark";
+};
 
-  <script id="mindmap-data" type="application/json">
-  {
-    "content": "Psychiatrie / Psychosomatik – Allgemeine Therapie-Methoden",
-    "children": [
-      {
-        "content": "Grundprinzip",
-        "children": [
-          {
-            "content": "Multimodale Therapie",
-            "children": []
-          },
-          {
-            "content": "Biopsychosoziales Modell",
-            "children": [
-              {
-                "content": "Bio",
-                "children": [
-                  { "content": "Körper", "children": [] },
-                  { "content": "Gehirn", "children": [] },
-                  { "content": "Medikamente", "children": [] },
-                  { "content": "Schlaf", "children": [] },
-                  { "content": "Schmerzen", "children": [] },
-                  { "content": "Substanzen", "children": [] }
-                ]
-              },
-              {
-                "content": "Psycho",
-                "children": [
-                  { "content": "Gedanken", "children": [] },
-                  { "content": "Gefühle", "children": [] },
-                  { "content": "Verhalten", "children": [] },
-                  { "content": "Trauma", "children": [] },
-                  { "content": "Konflikte", "children": [] }
-                ]
-              },
-              {
-                "content": "Sozial",
-                "children": [
-                  { "content": "Familie", "children": [] },
-                  { "content": "Arbeit", "children": [] },
-                  { "content": "Wohnen", "children": [] },
-                  { "content": "Finanzen", "children": [] },
-                  { "content": "Unterstützung", "children": [] }
-                ]
-              }
-            ]
-          },
-          {
-            "content": "Kombination mehrerer Methoden",
-            "children": [
-              { "content": "Psychotherapie", "children": [] },
-              { "content": "Psychopharmaka", "children": [] },
-              { "content": "Psychoedukation", "children": [] },
-              { "content": "psychosoziale Unterstützung", "children": [] },
-              { "content": "körperorientierte Verfahren", "children": [] },
-              { "content": "stationäre oder ambulante Behandlung", "children": [] }
-            ]
-          }
-        ]
-      },
-      {
-        "content": "1. Diagnostische Basis vor Therapie",
-        "children": [
-          {
-            "content": "Psychiatrische Anamnese",
-            "children": [
-              { "content": "aktuelle Beschwerden", "children": [] },
-              { "content": "psychiatrische Vorgeschichte", "children": [] },
-              { "content": "somatische Vorgeschichte", "children": [] },
-              { "content": "Medikamentenanamnese", "children": [] },
-              { "content": "Suchtanamnese", "children": [] },
-              { "content": "Familienanamnese", "children": [] },
-              { "content": "Sozialanamnese", "children": [] },
-              { "content": "vegetative Anamnese", "children": [] }
-            ]
-          },
-          {
-            "content": "Psychopathologischer Befund",
-            "children": [
-              { "content": "Bewusstsein", "children": [] },
-              { "content": "Orientierung", "children": [] },
-              { "content": "Aufmerksamkeit und Gedächtnis", "children": [] },
-              { "content": "Denken", "children": [] },
-              { "content": "Wahrnehmung", "children": [] },
-              { "content": "Ich-Störungen", "children": [] },
-              { "content": "Affektivität", "children": [] },
-              { "content": "Antrieb und Psychomotorik", "children": [] },
-              { "content": "Krankheitseinsicht", "children": [] }
-            ]
-          },
-          {
-            "content": "Gefährdungsbeurteilung",
-            "children": [
-              { "content": "Suizidalität", "children": [] },
-              { "content": "Fremdgefährdung", "children": [] },
-              { "content": "Selbstvernachlässigung", "children": [] },
-              { "content": "Absprachefähigkeit", "children": [] }
-            ]
-          },
-          {
-            "content": "Organische Ursachen ausschließen",
-            "children": [
-              { "content": "Delir", "children": [] },
-              { "content": "Intoxikation", "children": [] },
-              { "content": "Entzug", "children": [] },
-              { "content": "neurologische Erkrankung", "children": [] },
-              { "content": "endokrine / metabolische Ursachen", "children": [] },
-              { "content": "Medikamentennebenwirkungen", "children": [] }
-            ]
-          }
-        ]
-      },
-      {
-        "content": "2. Psychoedukation",
-        "children": [
-          { "content": "Patient versteht die Erkrankung", "children": [] },
-          { "content": "Symptome erklären", "children": [] },
-          { "content": "Verlauf erklären", "children": [] },
-          { "content": "Warnzeichen erklären", "children": [] },
-          { "content": "Therapieoptionen erklären", "children": [] },
-          { "content": "Angehörige einbeziehen", "children": [] },
-          { "content": "Rückfallprophylaxe", "children": [] }
-        ]
-      },
-      {
-        "content": "3. Psychotherapeutische Methoden",
-        "children": [
-          {
-            "content": "Kognitive Verhaltenstherapie, KVT",
-            "children": [
-              { "content": "Gedanken erkennen", "children": [] },
-              { "content": "Verhalten verändern", "children": [] },
-              { "content": "Aktivierung", "children": [] },
-              { "content": "Bewältigungsstrategien", "children": [] }
-            ]
-          },
-          {
-            "content": "Exposition",
-            "children": [
-              { "content": "Konfrontation mit Angst oder Vermeidung", "children": [] },
-              { "content": "Vermeidungsverhalten abbauen", "children": [] }
-            ]
-          },
-          {
-            "content": "Psychodynamische Therapie",
-            "children": [
-              { "content": "innere Konflikte", "children": [] },
-              { "content": "Beziehungsmuster", "children": [] },
-              { "content": "biografische Belastungen", "children": [] }
-            ]
-          },
-          {
-            "content": "Tiefenpsychologisch fundierte Therapie",
-            "children": [
-              { "content": "aktuelle Konflikte", "children": [] },
-              { "content": "frühere Beziehungserfahrungen", "children": [] },
-              { "content": "unbewusste Muster", "children": [] }
-            ]
-          },
-          {
-            "content": "Systemische Therapie",
-            "children": [
-              { "content": "Familie", "children": [] },
-              { "content": "Beziehung", "children": [] },
-              { "content": "soziale Systeme", "children": [] }
-            ]
-          },
-          {
-            "content": "Traumatherapie",
-            "children": [
-              { "content": "Stabilisierung", "children": [] },
-              { "content": "Ressourcenaufbau", "children": [] },
-              { "content": "Traumabearbeitung", "children": [] },
-              { "content": "EMDR", "children": [] }
-            ]
-          },
-          {
-            "content": "Supportive Therapie",
-            "children": [
-              { "content": "Stabilisierung", "children": [] },
-              { "content": "Begleitung", "children": [] },
-              { "content": "Krisenbewältigung", "children": [] }
-            ]
-          },
-          {
-            "content": "Gruppentherapie",
-            "children": [
-              { "content": "Austausch", "children": [] },
-              { "content": "soziale Unterstützung", "children": [] },
-              { "content": "Training von Fähigkeiten", "children": [] }
-            ]
-          }
-        ]
-      },
-      {
-        "content": "4. Psychopharmakotherapie",
-        "children": [
-          {
-            "content": "Antidepressiva",
-            "children": [
-              { "content": "SSRI", "children": [] },
-              { "content": "SNRI", "children": [] },
-              { "content": "Mirtazapin", "children": [] },
-              { "content": "trizyklische Antidepressiva", "children": [] }
-            ]
-          },
-          {
-            "content": "Antipsychotika",
-            "children": [
-              { "content": "typische Antipsychotika", "children": [] },
-              { "content": "atypische Antipsychotika", "children": [] }
-            ]
-          },
-          {
-            "content": "Stimmungsstabilisierer",
-            "children": [
-              { "content": "Lithium", "children": [] },
-              { "content": "Antikonvulsiva", "children": [] }
-            ]
-          },
-          {
-            "content": "Anxiolytika und Sedativa",
-            "children": [
-              { "content": "Benzodiazepine nur kurzfristig", "children": [] },
-              { "content": "Z-Substanzen nur kurzfristig", "children": [] }
-            ]
-          },
-          {
-            "content": "Medikamente bei Sucht",
-            "children": [
-              { "content": "Entzugsbehandlung", "children": [] },
-              { "content": "Rückfallprophylaxe", "children": [] }
-            ]
-          },
-          {
-            "content": "Kontrollen",
-            "children": [
-              { "content": "Wirkung", "children": [] },
-              { "content": "Nebenwirkungen", "children": [] },
-              { "content": "Labor", "children": [] },
-              { "content": "EKG", "children": [] },
-              { "content": "Interaktionen", "children": [] },
-              { "content": "Adhärenz", "children": [] }
-            ]
-          }
-        ]
-      },
-      {
-        "content": "5. Somatische / biologische Therapieverfahren",
-        "children": [
-          { "content": "Elektrokonvulsionstherapie, EKT", "children": [] },
-          { "content": "Lichttherapie", "children": [] },
-          { "content": "Schlaf-Wach-Therapie", "children": [] },
-          { "content": "Bewegungs- und Sporttherapie", "children": [] },
-          { "content": "Ergotherapie", "children": [] },
-          { "content": "Physiotherapie", "children": [] },
-          { "content": "Ernährungstherapie", "children": [] },
-          { "content": "Entspannungsverfahren", "children": [] }
-        ]
-      },
-      {
-        "content": "6. Psychosomatische Therapie",
-        "children": [
-          { "content": "Körper und Psyche gemeinsam behandeln", "children": [] },
-          { "content": "Beschwerden ernst nehmen", "children": [] },
-          { "content": "biopsychosoziales Krankheitsmodell erklären", "children": [] },
-          { "content": "Stressreduktion", "children": [] },
-          { "content": "Schmerzbewältigung", "children": [] },
-          { "content": "Schlafhygiene", "children": [] },
-          { "content": "Entspannung", "children": [] },
-          { "content": "Achtsamkeit", "children": [] },
-          { "content": "Körperwahrnehmung", "children": [] },
-          { "content": "Aktivierung", "children": [] },
-          { "content": "feste regelmäßige Termine", "children": [] },
-          { "content": "unnötige Wiederholungsdiagnostik vermeiden", "children": [] }
-        ]
-      },
-      {
-        "content": "7. Sozialpsychiatrische Therapie",
-        "children": [
-          { "content": "Sozialdienst", "children": [] },
-          { "content": "Angehörigenarbeit", "children": [] },
-          { "content": "ambulante psychiatrische Pflege", "children": [] },
-          { "content": "Soziotherapie", "children": [] },
-          { "content": "betreutes Wohnen", "children": [] },
-          { "content": "berufliche Wiedereingliederung", "children": [] },
-          { "content": "Selbsthilfegruppen", "children": [] },
-          { "content": "rechtliche Betreuung bei Bedarf", "children": [] },
-          { "content": "Krisendienst", "children": [] }
-        ]
-      },
-      {
-        "content": "8. Setting der Behandlung",
-        "children": [
-          {
-            "content": "Ambulante Behandlung",
-            "children": [
-              { "content": "Patient stabil", "children": [] },
-              { "content": "keine akute Gefährdung", "children": [] },
-              { "content": "ausreichende Unterstützung", "children": [] }
-            ]
-          },
-          {
-            "content": "Tagesklinik",
-            "children": [
-              { "content": "intensive Behandlung", "children": [] },
-              { "content": "Patient schläft zu Hause", "children": [] }
-            ]
-          },
-          {
-            "content": "Stationäre Behandlung",
-            "children": [
-              { "content": "schwere Symptomatik", "children": [] },
-              { "content": "Diagnostik nötig", "children": [] },
-              { "content": "Krisenintervention", "children": [] }
-            ]
-          },
-          {
-            "content": "Geschützte stationäre Behandlung",
-            "children": [
-              { "content": "akute Suizidalität", "children": [] },
-              { "content": "Fremdgefährdung", "children": [] },
-              { "content": "fehlende Absprachefähigkeit", "children": [] },
-              { "content": "schwere Selbstvernachlässigung", "children": [] }
-            ]
-          }
-        ]
-      },
-      {
-        "content": "9. Therapieziele",
-        "children": [
-          { "content": "Sicherheit herstellen", "children": [] },
-          { "content": "Symptome reduzieren", "children": [] },
-          { "content": "Alltagsfunktion verbessern", "children": [] },
-          { "content": "Krankheit verstehen", "children": [] },
-          { "content": "Rückfälle verhindern", "children": [] },
-          { "content": "soziale Teilhabe verbessern", "children": [] },
-          { "content": "Lebensqualität verbessern", "children": [] },
-          { "content": "Selbstwirksamkeit stärken", "children": [] }
-        ]
-      }
-    ]
+const apply=(t,save=true)=>{
+  t=t==="dark" ? "dark" : "light";
+  document.documentElement.dataset.theme=t;
+  document.documentElement.classList.toggle("markmap-dark",t==="dark");
+  if(save) localStorage.setItem(KEY,t);
+
+  theme.textContent=t==="dark" ? "☀ Hell" : "☾ Dunkel";
+  theme.setAttribute("aria-label",t==="dark" ? "Zum hellen Modus wechseln" : "Zum dunklen Modus wechseln");
+
+  if(toolbarTheme){
+    toolbarTheme.textContent=t==="dark" ? "☀" : "☾";
+    toolbarTheme.title=t==="dark" ? "Hellen Modus aktivieren" : "Dunklen Modus aktivieren";
+    toolbarTheme.setAttribute("aria-label",toolbarTheme.title);
   }
-  </script>
+};
 
-  <script>
-    const fullData = JSON.parse(document.getElementById("mindmap-data").textContent);
-    const svg = document.getElementById("mindmap");
-    const sectionSelect = document.getElementById("section");
-    const fullBtn = document.getElementById("full");
-    const overviewBtn = document.getElementById("overview");
-    const focusBtn = document.getElementById("focus");
-    const themeBtn = document.getElementById("theme");
-    const badge = document.getElementById("badge");
-    const msg = document.getElementById("msg");
+const toggle=()=>apply(document.documentElement.dataset.theme==="dark" ? "light" : "dark");
 
-    let currentMode = "full";
-    let markmapInstance = null;
+const setActive=view=>{
+  full.classList.toggle("active",view==="full");
+  overview.classList.toggle("active",view==="overview");
+  focus.classList.toggle("active",view==="focus");
+};
 
-    function clone(obj) {
-      return JSON.parse(JSON.stringify(obj));
+const setBadge=text=>badge.querySelector("span:last-child").textContent=text;
+
+const fit=(delay=80)=>setTimeout(()=>{
+  try{ if(mm&&mm.fit) mm.fit(); }
+  catch(e){ console.warn("Fit failed",e); }
+},delay);
+
+const show=text=>{
+  msg.textContent=text;
+  msg.classList.add("on");
+  clearTimeout(show.timer);
+  show.timer=setTimeout(()=>msg.classList.remove("on"),3800);
+};
+
+const setMap=(data,label,view)=>{
+  if(!mm) return;
+  mm.setData(clone(data));
+  setActive(view);
+  setBadge(label);
+  fit();
+};
+
+const overviewData=()=>{
+  const root=clone(DATA);
+  root.children=root.children.map(section=>({
+    content:section.content,
+    children:[],
+    payload:section.payload||{}
+  }));
+  return root;
+};
+
+const focusData=index=>{
+  const root=clone(DATA);
+  root.children=[clone(DATA.children[index])];
+  return root;
+};
+
+DATA.children.forEach((item,index)=>{
+  const option=document.createElement("option");
+  option.value=String(index);
+  option.textContent=item.content;
+  section.append(option);
+});
+
+function makeToolbar(){
+  if(!window.markmap||!window.markmap.Toolbar||!mm) return;
+
+  const toolbar=new window.markmap.Toolbar();
+  toolbar.attach(mm);
+  const el=toolbar.render();
+
+  el.classList.add("study-toolbar");
+  el.style.position="absolute";
+  el.style.bottom="20px";
+  el.style.right="20px";
+
+  el.querySelectorAll("a").forEach(a=>{
+    const href=(a.getAttribute("href")||"").toLowerCase();
+    const label=`${a.textContent||""} ${a.title||""} ${a.getAttribute("aria-label")||""}`.toLowerCase();
+    if(href.includes("markmap")||label.includes("markmap")){
+      a.removeAttribute("href");
+      a.removeAttribute("target");
+      a.removeAttribute("rel");
+      a.setAttribute("aria-hidden","true");
+      a.setAttribute("tabindex","-1");
+      a.style.display="none";
+      a.style.pointerEvents="none";
     }
+  });
 
-    function showMessage(text) {
-      msg.textContent = text;
-      msg.classList.add("on");
-      window.clearTimeout(showMessage.timer);
-      showMessage.timer = window.setTimeout(() => msg.classList.remove("on"), 2200);
-    }
+  const brand=document.createElement("span");
+  brand.className="toolbar-brand";
+  brand.textContent="Therapie";
+  brand.title="Lokale Lern-Mindmap – kein externer Link";
+  el.prepend(brand);
 
-    function setBadge(text) {
-      badge.querySelector("span:last-child").textContent = text;
-    }
+  toolbarTheme=document.createElement("button");
+  toolbarTheme.className="toolbar-theme";
+  toolbarTheme.type="button";
+  toolbarTheme.addEventListener("click",toggle);
+  el.append(toolbarTheme);
 
-    function setActive(button) {
-      [fullBtn, overviewBtn, focusBtn].forEach(btn => btn.classList.remove("active"));
-      button.classList.add("active");
-    }
+  document.body.append(el);
+  apply(document.documentElement.dataset.theme||pref(),false);
+}
 
-    function makeOverviewData() {
-      const data = clone(fullData);
-      data.children = data.children.map(child => ({
-        content: child.content,
-        children: []
-      }));
-      return data;
-    }
+function init(){
+  if(!window.markmap||!window.d3){
+    show("Die Markmap-Bibliotheken konnten nicht geladen werden. Prüfe bitte Internetverbindung oder CDN-Zugriff.");
+    return;
+  }
 
-    function makeFocusData(index) {
-      const selected = clone(fullData.children[index]);
-      return {
-        content: fullData.content,
-        children: [selected]
-      };
-    }
+  const {Markmap,deriveOptions}=window.markmap;
+  const options=deriveOptions({
+    autoFit:true,
+    colorFreezeLevel:2,
+    duration:420,
+    initialExpandLevel:-1,
+    maxWidth:360,
+    spacingHorizontal:92,
+    spacingVertical:11
+  });
 
-    function render(data) {
-      d3.select(svg).selectAll("*").remove();
+  mm=Markmap.create("svg#mindmap",options,clone(DATA));
+  window.mm=mm;
+  window.psychosomatikMindmapData=DATA;
+  window.therapieMindmapData=DATA;
 
-      const { Markmap } = window.markmap;
+  makeToolbar();
+  fit(180);
+  setBadge(`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`);
+}
 
-      markmapInstance = Markmap.create(svg, {
-        autoFit: true,
-        duration: 450,
-        spacingHorizontal: 90,
-        spacingVertical: 9,
-        initialExpandLevel: 10
-      }, data);
+full.addEventListener("click",()=>{
+  setMap(DATA,`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`,"full");
+});
 
-      setTimeout(() => {
-        if (markmapInstance) markmapInstance.fit();
-      }, 120);
-    }
+overview.addEventListener("click",()=>{
+  setMap(overviewData(),"Überblick · nur Hauptbereiche sichtbar · Vollansicht stellt alle Details wieder her","overview");
+});
 
-    function populateSections() {
-      sectionSelect.innerHTML = "";
-      fullData.children.forEach((child, index) => {
-        const option = document.createElement("option");
-        option.value = index;
-        option.textContent = child.content;
-        sectionSelect.appendChild(option);
-      });
-    }
+focus.addEventListener("click",()=>{
+  const index=Number(section.value||0);
+  const label=DATA.children[index]?.content||"ausgewählter Bereich";
+  setMap(focusData(index),`Fokusansicht · ${label} · Vollansicht stellt die Gesamtmap wieder her`,"focus");
+});
 
-    fullBtn.addEventListener("click", () => {
-      currentMode = "full";
-      setActive(fullBtn);
-      render(clone(fullData));
-      setBadge("Vollansicht · alle Therapie-Methoden sichtbar");
-    });
+theme.addEventListener("click",toggle);
+window.addEventListener("resize",()=>fit(160));
 
-    overviewBtn.addEventListener("click", () => {
-      currentMode = "overview";
-      setActive(overviewBtn);
-      render(makeOverviewData());
-      setBadge("Überblick · nur Hauptbereiche sichtbar");
-    });
-
-    focusBtn.addEventListener("click", () => {
-      currentMode = "focus";
-      setActive(focusBtn);
-      const index = Number(sectionSelect.value);
-      render(makeFocusData(index));
-      setBadge("Fokus · " + fullData.children[index].content);
-    });
-
-    themeBtn.addEventListener("click", () => {
-      const html = document.documentElement;
-      const next = html.dataset.theme === "dark" ? "light" : "dark";
-      html.dataset.theme = next;
-      localStorage.setItem("mindmap-theme", next);
-      showMessage(next === "dark" ? "Dunkles Theme aktiviert" : "Helles Theme aktiviert");
-    });
-
-    window.addEventListener("resize", () => {
-      if (markmapInstance) {
-        window.clearTimeout(window.__fitTimer);
-        window.__fitTimer = window.setTimeout(() => markmapInstance.fit(), 150);
-      }
-    });
-
-    function initToolbar() {
-      try {
-        const { Toolbar } = window.markmap;
-        if (!Toolbar || !markmapInstance) return;
-
-        const toolbar = new Toolbar();
-        toolbar.attach(markmapInstance);
-
-        const el = toolbar.render();
-        el.classList.add("study-toolbar");
-
-        const brand = document.createElement("span");
-        brand.className = "toolbar-brand";
-        brand.textContent = "Therapie";
-
-        const themeSmall = document.createElement("button");
-        themeSmall.className = "toolbar-theme";
-        themeSmall.type = "button";
-        themeSmall.textContent = "☾";
-        themeSmall.title = "Theme wechseln";
-        themeSmall.addEventListener("click", () => themeBtn.click());
-
-        el.prepend(brand);
-        el.appendChild(themeSmall);
-
-        document.body.appendChild(el);
-      } catch (error) {
-        console.warn("Toolbar konnte nicht geladen werden:", error);
-      }
-    }
-
-    function init() {
-      const savedTheme = localStorage.getItem("mindmap-theme");
-      if (savedTheme) document.documentElement.dataset.theme = savedTheme;
-
-      populateSections();
-      render(clone(fullData));
-      initToolbar();
-    }
-
-    init();
-  </script>
+apply(pref(),false);
+init();
+})();
+</script>
 </body>
 </html>
