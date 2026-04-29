@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark" class="markmap-dark"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="color-scheme" content="light dark">
+<title>Psychosomatik – Lern-Mindmap</title>
+
+<style>
+:root{--bg:#f6f8fb;--map:#fbfcff;--panel:rgba(255,255,255,.93);--solid:#fff;--text:#0f172a;--muted:#475569;--border:rgba(15,23,42,.13);--shadow:0 18px 50px rgba(15,23,42,.14);--accent:#2563eb;--accent2:#7c3aed;--soft:rgba(37,99,235,.11);--branch:rgba(37,99,235,.45);--node:#fff;--nodeStroke:rgba(37,99,235,.32);--head:86px}
+html[data-theme=dark]{--bg:#0b1120;--map:#0f172a;--panel:rgba(15,23,42,.9);--solid:#111827;--text:#e5e7eb;--muted:#a7b2c4;--border:rgba(226,232,240,.16);--shadow:0 18px 55px rgba(0,0,0,.42);--accent:#60a5fa;--accent2:#a78bfa;--soft:rgba(96,165,250,.16);--branch:rgba(147,197,253,.48);--node:#111827;--nodeStroke:rgba(147,197,253,.35)}
+*{box-sizing:border-box}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.top{position:fixed;z-index:20;top:14px;left:14px;right:14px;display:grid;grid-template-columns:minmax(250px,1fr) auto;gap:16px;align-items:center;min-height:70px;padding:14px 16px;border:1px solid var(--border);border-radius:24px;background:var(--panel);box-shadow:var(--shadow);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.logo{display:grid;place-items:center;width:42px;height:42px;flex:0 0 auto;border-radius:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:900;box-shadow:0 10px 28px rgba(37,99,235,.26)}
+h1{margin:0;font-size:clamp(17px,2.3vw,24px);line-height:1.05;letter-spacing:-.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sub{margin-top:5px;color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.controls{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;align-items:center}
+.group{display:inline-flex;gap:8px;align-items:center;padding:4px;border:1px solid var(--border);border-radius:16px;background:var(--soft)}
+button,input{font:inherit}
+.btn,.search{min-height:36px;border:1px solid var(--border);border-radius:12px;background:var(--solid);color:var(--text);font-weight:750}
+.btn{padding:0 12px;cursor:pointer;transition:.14s}
+.btn:hover{color:var(--accent);transform:translateY(-1px)}
+.btn.active{border-color:transparent;background:var(--accent);color:#fff}
+.search{width:min(340px,36vw);padding:0 12px;outline:0;font-weight:650}
+.search::placeholder{color:var(--muted)}
+.btn:focus-visible,.search:focus{outline:3px solid var(--soft);outline-offset:2px}
+.shell{position:fixed;inset:0;overflow:hidden;background:radial-gradient(circle at top left,var(--soft),transparent 32%),radial-gradient(circle at bottom right,rgba(124,58,237,.13),transparent 36%),var(--map)}
+#mindmap{display:block;width:100vw;height:100vh;padding-top:var(--head);background:transparent;cursor:grab}
+#mindmap:active{cursor:grabbing}
+#mindmap text{fill:var(--text)!important;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;font-size:15px!important;font-weight:650!important;letter-spacing:-.01em}
+#mindmap g.markmap-node>circle{fill:var(--node)!important;stroke:var(--nodeStroke)!important;stroke-width:1.6px!important}
+#mindmap path.markmap-link{stroke:var(--branch)!important;stroke-width:1.8px!important}
+#mindmap g.markmap-node.markmap-clickable .markmap-foreign{cursor:pointer}
+#mindmap g.markmap-node.markmap-clickable .markmap-foreign:hover{color:var(--accent)!important}
+.badge{position:fixed;z-index:12;left:22px;bottom:24px;display:inline-flex;gap:8px;align-items:center;max-width:min(620px,calc(100vw - 220px));padding:10px 13px;border:1px solid var(--border);border-radius:999px;background:var(--panel);box-shadow:0 10px 28px rgba(15,23,42,.12);color:var(--muted);font-size:12px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--soft)}
+.msg{position:fixed;z-index:40;top:100px;left:50%;display:none;max-width:min(720px,calc(100vw - 28px));padding:12px 14px;border:1px solid var(--border);border-radius:16px;background:var(--solid);color:var(--text);box-shadow:var(--shadow);font-size:13px;line-height:1.35;transform:translateX(-50%)}
+.msg.on{display:block}
+
+/* hide original Markmap toolbar/logo completely */
+.mm-toolbar,.markmap-toolbar,.mm-toolbar-brand,.mm-toolbar a[href*="markmap"],.mm-toolbar a[title*="markmap"],.mm-toolbar a[aria-label*="markmap"]{display:none!important;pointer-events:none!important}
+
+/* clean custom toolbar */
+.custom-toolbar{position:fixed;z-index:30;right:20px;bottom:20px;display:flex;align-items:center;gap:6px;padding:7px;border:1px solid var(--border);border-radius:18px;background:var(--panel);box-shadow:var(--shadow);color:var(--text);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.toolbar-brand{display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:0 11px;border:1px solid var(--border);border-radius:12px;background:var(--soft);color:var(--accent);font-size:12px;font-weight:850;white-space:nowrap;user-select:none}
+.toolbtn{display:inline-flex;align-items:center;justify-content:center;width:34px;height:32px;border:1px solid var(--border);border-radius:12px;background:var(--solid);color:var(--text);font-size:17px;font-weight:900;cursor:pointer;line-height:1;transition:.14s}
+.toolbtn:hover{color:var(--accent);transform:translateY(-1px)}
+.toolbtn:focus-visible{outline:3px solid var(--soft);outline-offset:2px}
+
+@media(max-width:980px){.top{grid-template-columns:1fr}.controls{justify-content:flex-start}.search{width:100%}.badge{max-width:calc(100vw - 32px);bottom:92px}}
+@media(max-width:640px){:root{--head:168px}.top{top:8px;left:8px;right:8px;padding:12px;border-radius:20px}.sub{white-space:normal}.controls,.group{width:100%}.group{flex-wrap:wrap}.btn,.search{flex:1 1 auto}.custom-toolbar{right:8px;bottom:10px}.toolbar-brand{display:none}}
+
+#mindmap g.markmap-node.markmap-clickable,#mindmap g.markmap-node.markmap-clickable line,#mindmap g.markmap-node.markmap-clickable circle,#mindmap g.markmap-node.markmap-clickable .markmap-foreign,#mindmap g.markmap-node.markmap-clickable .markmap-foreign *{cursor:pointer!important}
+#mindmap g.markmap-node.markmap-clickable:hover .markmap-foreign{color:var(--accent)!important}
+</style>
+</head>
+
+<body>
+
+<header class="top" aria-label="Mindmap-Steuerung">
+  <div class="brand">
+    <div class="logo" aria-hidden="true">Ψ</div>
+    <div>
+      <h1>Psychiatrie / Psychosomatik</h1>
+      <div class="sub">Professionelle Lern-Mindmap · Suche statt Kapitel-Auswahl · Originalinhalt erhalten</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="group" aria-label="Ansicht wählen">
+      <button class="btn" id="full" type="button" title="Alle Kategorien und Unterpunkte anzeigen">Vollansicht</button>
+      <button class="btn active" id="overview" type="button" title="Nur Hauptbereiche anzeigen, Details bleiben aufklappbar">Überblick</button>
+    </div>
+
+    <div class="group" aria-label="Mindmap durchsuchen">
+      <input class="search" id="search" type="search" placeholder="Suche: Depression, Angst, Trauma..." autocomplete="off">
+      <button class="btn" id="searchBtn" type="button" title="Suche ausführen">Suchen</button>
+      <button class="btn" id="clearSearch" type="button" title="Suche löschen">Löschen</button>
+    </div>
+
+    <button class="btn" id="theme" type="button" title="Hell/Dunkel wechseln" aria-label="Zum hellen Modus wechseln">☀ Hell</button>
+  </div>
+</header>
+
+<main class="shell" aria-label="Mindmap-Fläche">
+  <svg id="mindmap" role="img" aria-label="Psychiatrie und Psychosomatik Lern-Mindmap" class="markmap mindmap" data-label-toggle-bound="1" style="--markmap-max-width: 360px;"></svg>
+</main>
+
+<div class="badge" id="badge" aria-live="polite">
+  <span class="dot" aria-hidden="true"></span>
+  <span>Überblick · Hauptbereiche sichtbar · Text oder Kreis anklicken zum Öffnen</span>
+</div>
+
+<div class="msg" id="msg" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-view/dist/browser/index.js"></script>
+
+<script id="mindmap-data" type="application/json">
+{"content":"Psychiatrie / Psychosomatik – Krankheiten und Untertypen","children":[{"content":"A. Affektive Störungen","children":[{"content":"Depression","children":[{"content":"leichte depressive Episode","children":[],"payload":{"tag":"h4","lines":"6,7"}},{"content":"mittelgradige depressive Episode","children":[],"payload":{"tag":"h4","lines":"8,9"}},{"content":"schwere depressive Episode","children":[],"payload":{"tag":"h4","lines":"10,11"}},{"content":"schwere depressive Episode mit psychotischen Symptomen","children":[],"payload":{"tag":"h4","lines":"12,13"}},{"content":"rezidivierende depressive Störung","children":[],"payload":{"tag":"h4","lines":"14,15"}},{"content":"Dysthymie","children":[],"payload":{"tag":"h4","lines":"16,17"}},{"content":"unipolare Depression","children":[],"payload":{"tag":"h4","lines":"18,19"}},{"content":"bipolare Depression","children":[],"payload":{"tag":"h4","lines":"20,21"}}],"payload":{"tag":"h3","lines":"4,5"}},{"content":"Manie","children":[],"payload":{"tag":"h3","lines":"22,23"}},{"content":"Hypomanie","children":[],"payload":{"tag":"h3","lines":"24,25"}},{"content":"bipolare Störung","children":[{"content":"depressive Episoden","children":[],"payload":{"tag":"h4","lines":"28,29"}},{"content":"manische Episoden","children":[],"payload":{"tag":"h4","lines":"30,31"}},{"content":"hypomanische Episoden","children":[],"payload":{"tag":"h4","lines":"32,33"}},{"content":"gemischte Zustände","children":[],"payload":{"tag":"h4","lines":"34,35"}}],"payload":{"tag":"h3","lines":"26,27"}}],"payload":{"tag":"h2","lines":"2,3"}},{"content":"B. Angststörungen","children":[{"content":"Panikstörung","children":[{"content":"wiederholte Panikattacken","children":[],"payload":{"tag":"h4","lines":"40,41"}}],"payload":{"tag":"h3","lines":"38,39"}},{"content":"Agoraphobie","children":[{"content":"Angst vor Orten ohne schnelle Fluchtmöglichkeit","children":[],"payload":{"tag":"h4","lines":"44,45"}}],"payload":{"tag":"h3","lines":"42,43"}},{"content":"soziale Phobie","children":[{"content":"Angst vor Bewertung durch andere","children":[],"payload":{"tag":"h4","lines":"48,49"}}],"payload":{"tag":"h3","lines":"46,47"}},{"content":"spezifische Phobie","children":[{"content":"z. B. Tiere, Höhe, Blut, Spritzen, Flugangst","children":[],"payload":{"tag":"h4","lines":"52,53"}}],"payload":{"tag":"h3","lines":"50,51"}},{"content":"generalisierte Angststörung","children":[{"content":"dauerhafte Sorgen und Anspannung","children":[],"payload":{"tag":"h4","lines":"56,57"}}],"payload":{"tag":"h3","lines":"54,55"}},{"content":"Krankheitsangst / Hypochondrie","children":[{"content":"starke Angst, schwer krank zu sein","children":[],"payload":{"tag":"h4","lines":"60,61"}}],"payload":{"tag":"h3","lines":"58,59"}}],"payload":{"tag":"h2","lines":"36,37"}},{"content":"C. Zwangsstörung","children":[{"content":"Zwangsgedanken","children":[{"content":"aufdringliche Gedanken, die Angst auslösen","children":[],"payload":{"tag":"h4","lines":"66,67"}}],"payload":{"tag":"h3","lines":"64,65"}},{"content":"Zwangshandlungen","children":[{"content":"Handlungen zur Angstreduktion","children":[],"payload":{"tag":"h4","lines":"70,71"}}],"payload":{"tag":"h3","lines":"68,69"}},{"content":"Waschzwang","children":[],"payload":{"tag":"h3","lines":"72,73"}},{"content":"Kontrollzwang","children":[],"payload":{"tag":"h3","lines":"74,75"}},{"content":"Ordnungs- / Symmetriezwang","children":[],"payload":{"tag":"h3","lines":"76,77"}},{"content":"wichtige Abgrenzung","children":[{"content":"Zwang vs. Wahn","children":[],"payload":{"tag":"h4","lines":"80,81"}},{"content":"Zwangsstörung vs. zwanghafte Persönlichkeit","children":[],"payload":{"tag":"h4","lines":"82,83"}}],"payload":{"tag":"h3","lines":"78,79"}}],"payload":{"tag":"h2","lines":"62,63"}},{"content":"D. Traumafolgestörungen","children":[{"content":"akute Belastungsreaktion","children":[],"payload":{"tag":"h3","lines":"86,87"}},{"content":"Anpassungsstörung","children":[],"payload":{"tag":"h3","lines":"88,89"}},{"content":"posttraumatische Belastungsstörung, PTBS","children":[],"payload":{"tag":"h3","lines":"90,91"}},{"content":"komplexe PTBS","children":[],"payload":{"tag":"h3","lines":"92,93"}},{"content":"Leitsymptome","children":[{"content":"Wiedererleben","children":[],"payload":{"tag":"h4","lines":"96,97"}},{"content":"Vermeidung","children":[],"payload":{"tag":"h4","lines":"98,99"}},{"content":"Hyperarousal","children":[],"payload":{"tag":"h4","lines":"100,101"}}],"payload":{"tag":"h3","lines":"94,95"}}],"payload":{"tag":"h2","lines":"84,85"}},{"content":"E. Somatoforme / psychosomatische Störungen","children":[{"content":"Somatisierungsstörung","children":[],"payload":{"tag":"h3","lines":"104,105"}},{"content":"hypochondrische Störung / Krankheitsangst","children":[],"payload":{"tag":"h3","lines":"106,107"}},{"content":"somatoforme autonome Funktionsstörung","children":[],"payload":{"tag":"h3","lines":"108,109"}},{"content":"anhaltende somatoforme Schmerzstörung","children":[],"payload":{"tag":"h3","lines":"110,111"}},{"content":"psychosomatische Bauchbeschwerden / Reizdarmsyndrom","children":[],"payload":{"tag":"h3","lines":"112,113"}}],"payload":{"tag":"h2","lines":"102,103"}},{"content":"F. Dissoziative Störungen / Konversionsstörung","children":[{"content":"dissoziative Bewegungsstörung","children":[],"payload":{"tag":"h3","lines":"116,117"}},{"content":"dissoziative Sensibilitätsstörung","children":[],"payload":{"tag":"h3","lines":"118,119"}},{"content":"dissoziative Krampfanfälle","children":[],"payload":{"tag":"h3","lines":"120,121"}},{"content":"dissoziative Amnesie","children":[],"payload":{"tag":"h3","lines":"122,123"}},{"content":"dissoziativer Stupor","children":[],"payload":{"tag":"h3","lines":"124,125"}},{"content":"Aphonie","children":[],"payload":{"tag":"h3","lines":"126,127"}},{"content":"psychogene Lähmung / Gangstörung","children":[],"payload":{"tag":"h3","lines":"128,129"}},{"content":"psychogene Sehstörung","children":[],"payload":{"tag":"h3","lines":"130,131"}}],"payload":{"tag":"h2","lines":"114,115"}},{"content":"G. Essstörungen","children":[{"content":"Anorexia nervosa","children":[{"content":"restriktiver Typ","children":[],"payload":{"tag":"h4","lines":"136,137"}},{"content":"Purging-Typ","children":[],"payload":{"tag":"h4","lines":"138,139"}}],"payload":{"tag":"h3","lines":"134,135"}},{"content":"Bulimia nervosa","children":[],"payload":{"tag":"h3","lines":"140,141"}},{"content":"Binge-Eating-Störung","children":[],"payload":{"tag":"h3","lines":"142,143"}},{"content":"wichtige Risiken","children":[{"content":"Elektrolytstörung","children":[],"payload":{"tag":"h4","lines":"146,147"}},{"content":"EKG-Veränderungen","children":[],"payload":{"tag":"h4","lines":"148,149"}},{"content":"Refeeding-Syndrom","children":[],"payload":{"tag":"h4","lines":"150,151"}},{"content":"Suizidalität","children":[],"payload":{"tag":"h4","lines":"152,153"}}],"payload":{"tag":"h3","lines":"144,145"}}],"payload":{"tag":"h2","lines":"132,133"}},{"content":"H. Suchterkrankungen / substanzinduzierte Störungen","children":[{"content":"Alkohol","children":[{"content":"Alkoholabhängigkeit","children":[],"payload":{"tag":"h4","lines":"158,159"}},{"content":"Alkoholintoxikation","children":[],"payload":{"tag":"h4","lines":"160,161"}},{"content":"Alkoholentzug","children":[],"payload":{"tag":"h4","lines":"162,163"}},{"content":"Entzugsdelir","children":[],"payload":{"tag":"h4","lines":"164,165"}},{"content":"Wernicke-Enzephalopathie / Korsakow-Syndrom","children":[],"payload":{"tag":"h4","lines":"166,167"}}],"payload":{"tag":"h3","lines":"156,157"}},{"content":"Benzodiazepine","children":[{"content":"Benzodiazepinintoxikation","children":[],"payload":{"tag":"h4","lines":"170,171"}},{"content":"Benzodiazepinentzug","children":[],"payload":{"tag":"h4","lines":"172,173"}}],"payload":{"tag":"h3","lines":"168,169"}},{"content":"Cannabis","children":[{"content":"cannabisinduzierte Symptome","children":[],"payload":{"tag":"h4","lines":"176,177"}}],"payload":{"tag":"h3","lines":"174,175"}},{"content":"Stimulanzien","children":[{"content":"stimulanzieninduzierte Psychose / Unruhe","children":[],"payload":{"tag":"h4","lines":"180,181"}}],"payload":{"tag":"h3","lines":"178,179"}},{"content":"Opiate","children":[{"content":"Opiatintoxikation","children":[],"payload":{"tag":"h4","lines":"184,185"}},{"content":"Opiatentzug","children":[],"payload":{"tag":"h4","lines":"186,187"}}],"payload":{"tag":"h3","lines":"182,183"}},{"content":"Nikotin","children":[{"content":"Nikotinentzug","children":[],"payload":{"tag":"h4","lines":"190,191"}}],"payload":{"tag":"h3","lines":"188,189"}}],"payload":{"tag":"h2","lines":"154,155"}},{"content":"I. Organische psychische Störungen","children":[{"content":"Delir","children":[{"content":"hyperaktives Delir","children":[],"payload":{"tag":"h4","lines":"196,197"}},{"content":"hypoaktives Delir","children":[],"payload":{"tag":"h4","lines":"198,199"}},{"content":"gemischtes Delir","children":[],"payload":{"tag":"h4","lines":"200,201"}}],"payload":{"tag":"h3","lines":"194,195"}},{"content":"Demenz","children":[{"content":"Alzheimer-Demenz","children":[],"payload":{"tag":"h4","lines":"204,205"}},{"content":"vaskuläre Demenz","children":[],"payload":{"tag":"h4","lines":"206,207"}},{"content":"Lewy-Körper-Demenz","children":[],"payload":{"tag":"h4","lines":"208,209"}},{"content":"frontotemporale Demenz","children":[],"payload":{"tag":"h4","lines":"210,211"}},{"content":"Parkinson-Demenz","children":[],"payload":{"tag":"h4","lines":"212,213"}}],"payload":{"tag":"h3","lines":"202,203"}},{"content":"depressive Pseudodemenz","children":[],"payload":{"tag":"h3","lines":"214,215"}},{"content":"substanz- / medikamenteninduzierte psychische Störungen","children":[],"payload":{"tag":"h3","lines":"216,217"}}],"payload":{"tag":"h2","lines":"192,193"}},{"content":"J. Schlafstörungen","children":[{"content":"Einschlafstörung","children":[],"payload":{"tag":"h3","lines":"220,221"}},{"content":"Durchschlafstörung","children":[],"payload":{"tag":"h3","lines":"222,223"}},{"content":"Früherwachen","children":[],"payload":{"tag":"h3","lines":"224,225"}},{"content":"Schlafstörung bei Depression","children":[],"payload":{"tag":"h3","lines":"226,227"}},{"content":"Schlafstörung bei Angst","children":[],"payload":{"tag":"h3","lines":"228,229"}},{"content":"Schlafstörung bei PTBS","children":[],"payload":{"tag":"h3","lines":"230,231"}},{"content":"Schlafapnoe als wichtige Differenzialdiagnose","children":[],"payload":{"tag":"h3","lines":"232,233"}}],"payload":{"tag":"h2","lines":"218,219"}},{"content":"K. Psychotische Symptome / psychoseverdächtige Befunde","children":[{"content":"Wahn","children":[],"payload":{"tag":"h3","lines":"236,237"}},{"content":"Halluzinationen","children":[{"content":"akustisch","children":[],"payload":{"tag":"h4","lines":"240,241"}},{"content":"kommentierend","children":[],"payload":{"tag":"h4","lines":"242,243"}},{"content":"dialogisierend","children":[],"payload":{"tag":"h4","lines":"244,245"}},{"content":"imperativ","children":[],"payload":{"tag":"h4","lines":"246,247"}},{"content":"optisch","children":[],"payload":{"tag":"h4","lines":"248,249"}}],"payload":{"tag":"h3","lines":"238,239"}},{"content":"Ich-Störungen","children":[{"content":"Depersonalisation","children":[],"payload":{"tag":"h4","lines":"252,253"}},{"content":"Derealisation","children":[],"payload":{"tag":"h4","lines":"254,255"}},{"content":"Gedankenentzug","children":[],"payload":{"tag":"h4","lines":"256,257"}},{"content":"Gedankeneingebung","children":[],"payload":{"tag":"h4","lines":"258,259"}},{"content":"Gedankenausbreitung","children":[],"payload":{"tag":"h4","lines":"260,261"}},{"content":"Fremdbeeinflussungserleben","children":[],"payload":{"tag":"h4","lines":"262,263"}}],"payload":{"tag":"h3","lines":"250,251"}},{"content":"Schizophrenie / akute Psychose","children":[],"payload":{"tag":"h3","lines":"264,265"}},{"content":"Differenzialdiagnosen","children":[{"content":"organische Psychose","children":[],"payload":{"tag":"h4","lines":"268,269"}},{"content":"substanzinduzierte Psychose","children":[],"payload":{"tag":"h4","lines":"270,271"}}],"payload":{"tag":"h3","lines":"266,267"}}],"payload":{"tag":"h2","lines":"234,235"}}],"payload":{"tag":"h1","lines":"0,1"}}
+</script>
+
+<script>
+(()=>{"use strict";
+
+const DATA=JSON.parse(document.getElementById("mindmap-data").textContent);
+const KEY="psychosomatik-search-mindmap-theme";
+
+const $=id=>document.getElementById(id);
+const badge=$("badge");
+const msg=$("msg");
+const full=$("full");
+const overview=$("overview");
+const theme=$("theme");
+const search=$("search");
+const searchBtn=$("searchBtn");
+const clearSearch=$("clearSearch");
+
+let mm=null;
+let toolbarEl=null;
+let currentZoom=1;
+let activeView="overview";
+let currentSearchRaw="";
+let suppressSyntheticClick=false;
+const searchFullPaths=new Set();
+const searchCollapsedPaths=new Set();
+
+const clone=o=>JSON.parse(JSON.stringify(o));
+const count=n=>1+(n.children||[]).reduce((s,c)=>s+count(c),0);
+const pathKey=path=>Array.isArray(path)?path.join("."):String(path??"");
+
+const stripHtml=s=>{
+  const tmp=document.createElement("div");
+  tmp.innerHTML=String(s||"");
+  return tmp.textContent||tmp.innerText||"";
+};
+
+const norm=s=>stripHtml(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+
+const pref=()=>{
+  const saved=localStorage.getItem(KEY);
+  return saved==="light"||saved==="dark" ? saved : "dark";
+};
+
+const apply=(t,save=true)=>{
+  t=t==="dark" ? "dark" : "light";
+  document.documentElement.dataset.theme=t;
+  document.documentElement.classList.toggle("markmap-dark",t==="dark");
+  if(save) localStorage.setItem(KEY,t);
+
+  theme.textContent=t==="dark" ? "☀ Hell" : "☾ Dunkel";
+  theme.setAttribute("aria-label",t==="dark" ? "Zum hellen Modus wechseln" : "Zum dunklen Modus wechseln");
+
+  const tbTheme=document.querySelector("#toolbarTheme");
+  if(tbTheme){
+    tbTheme.textContent=t==="dark" ? "☀" : "☾";
+    tbTheme.title="Hell/Dunkel wechseln";
+    tbTheme.setAttribute("aria-label","Hell/Dunkel wechseln");
+  }
+};
+
+const toggle=()=>apply(document.documentElement.dataset.theme==="dark" ? "light" : "dark");
+
+const setBadge=text=>{
+  const span=badge.querySelector("span:last-child");
+  if(span) span.textContent=text;
+};
+
+const setActive=view=>{
+  full.classList.toggle("active",view==="full");
+  overview.classList.toggle("active",view==="overview");
+};
+
+const show=text=>{
+  msg.textContent=text;
+  msg.classList.add("on");
+  clearTimeout(show.timer);
+  show.timer=setTimeout(()=>msg.classList.remove("on"),3200);
+};
+
+const fit=(delay=80)=>setTimeout(()=>{
+  try{
+    if(mm&&typeof mm.fit==="function") mm.fit();
+    currentZoom=1;
+  }catch(e){console.warn("Fit failed",e);}
+},delay);
+
+const rescale=ratio=>{
+  try{
+    if(mm&&typeof mm.rescale==="function"){
+      currentZoom*=ratio;
+      mm.rescale(currentZoom);
+      return;
+    }
+  }catch(e){console.warn("rescale failed",e);}
+
+  const g=document.querySelector("#mindmap>g");
+  if(!g) return;
+  currentZoom*=ratio;
+  const tr=g.getAttribute("transform")||"translate(0,0) scale(1)";
+  const t=tr.match(/translate\(([^)]*)\)/)?.[0]||"translate(0,0)";
+  g.setAttribute("transform",`${t} scale(${currentZoom})`);
+};
+
+const datumData=d=>(d&&d.data&&typeof d.data==="object") ? d.data : d;
+const getPathFromDatum=d=>{
+  const data=datumData(d);
+  return data&&Object.prototype.hasOwnProperty.call(data,"__path") ? String(data.__path) : "";
+};
+const getPath=(d,nodeEl)=>{
+  const fromDatum=getPathFromDatum(d);
+  if(fromDatum!=="") return fromDatum;
+  if(nodeEl&&nodeEl.hasAttribute&&nodeEl.hasAttribute("data-original-path")) return nodeEl.getAttribute("data-original-path")||"";
+  return fromDatum;
+};
+
+function findOriginalByPath(path){
+  const p=String(path??"");
+  if(!p) return DATA;
+  let node=DATA;
+  for(const part of p.split(".")){
+    if(part==="") continue;
+    const idx=Number(part);
+    if(!Number.isInteger(idx)||!node.children||!node.children[idx]) return null;
+    node=node.children[idx];
+  }
+  return node;
+}
+
+const hasVisibleChildren=d=>!!(d&&((d.children&&d.children.length)||(d._children&&d._children.length)));
+const hasOriginalChildren=(d,nodeEl)=>{
+  const original=findOriginalByPath(getPath(d,nodeEl));
+  return !!(original&&original.children&&original.children.length);
+};
+const isSearchMode=()=>activeView==="search"&&!!search.value.trim();
+const canToggleNode=(d,nodeEl)=>hasVisibleChildren(d)||(isSearchMode()&&hasOriginalChildren(d,nodeEl));
+
+function cloneShallowWithPath(node,path){
+  const copy={...node};
+  if(node.payload&&typeof node.payload==="object") copy.payload={...node.payload};
+  copy.__path=pathKey(path);
+  copy.children=[];
+  return copy;
+}
+
+function addPaths(node,path=[]){
+  const copy=cloneShallowWithPath(node,path);
+  copy.children=(node.children||[]).map((child,i)=>addPaths(child,path.concat(i)));
+  return copy;
+}
+
+function fullSubtreeForSearch(node,path=[]){
+  const p=pathKey(path);
+  const copy=cloneShallowWithPath(node,path);
+  if(searchCollapsedPaths.has(p)){
+    copy.children=[];
+    return copy;
+  }
+  copy.children=(node.children||[]).map((child,i)=>fullSubtreeForSearch(child,path.concat(i)));
+  return copy;
+}
+
+function subtreeHasMatch(node,q){
+  return norm(node.content).includes(q)||(node.children||[]).some(child=>subtreeHasMatch(child,q));
+}
+
+function filterTree(node,q,path=[]){
+  const p=pathKey(path);
+  const ownMatch=norm(node.content).includes(q);
+
+  if(searchCollapsedPaths.has(p)){
+    // Keep the clicked node visible if it is itself a match OR if it contains a match,
+    // but hide all original children/subcategories under it.
+    if(path.length===0||subtreeHasMatch(node,q)||searchFullPaths.has(p)) return cloneShallowWithPath(node,path);
+    return null;
+  }
+
+  if(searchFullPaths.has(p)){
+    return fullSubtreeForSearch(node,path);
+  }
+
+  const childMatches=(node.children||[])
+    .map((child,i)=>filterTree(child,q,path.concat(i)))
+    .filter(Boolean);
+
+  if(ownMatch&&path.length>0){
+    return fullSubtreeForSearch(node,path);
+  }
+
+  if(childMatches.length||path.length===0){
+    const copy=cloneShallowWithPath(node,path);
+    copy.children=childMatches;
+    return copy;
+  }
+
+  return null;
+}
+
+function prepareForRender(data){
+  return data&&Object.prototype.hasOwnProperty.call(data,"__path") ? clone(data) : addPaths(data);
+}
+
+function getImmediateChildrenFromDatum(d){
+  const data=datumData(d);
+  return Array.isArray(data&&data.children) ? data.children : [];
+}
+
+function isRenderedAsFullOriginal(d,path){
+  const original=findOriginalByPath(path);
+  if(!original||!Array.isArray(original.children)) return false;
+  const renderedChildren=getImmediateChildrenFromDatum(d);
+  if(renderedChildren.length!==original.children.length) return false;
+  return original.children.every((child,i)=>renderedChildren[i]&&renderedChildren[i].content===child.content);
+}
+
+function closestMarkmapNode(target){
+  const svg=$("mindmap");
+  let el=target instanceof Element ? target : null;
+  while(el&&el!==document&&el!==svg.parentNode){
+    if(el.matches&&el.matches("g.markmap-node")) return el;
+    el=el.parentNode instanceof Element ? el.parentNode : null;
+  }
+  return null;
+}
+
+const markClickableNodes=()=>{
+  document.querySelectorAll("#mindmap g.markmap-node").forEach(g=>{
+    const path=getPath(g.__data__,g);
+    g.setAttribute("data-original-path",path);
+    const clickable=canToggleNode(g.__data__,g);
+    g.classList.toggle("markmap-clickable",clickable);
+    g.style.cursor=clickable ? "pointer" : "default";
+    g.querySelectorAll("circle,line,.markmap-foreign,.markmap-foreign *").forEach(el=>{
+      el.style.cursor=clickable ? "pointer" : "default";
+    });
+    const fo=g.querySelector(".markmap-foreign");
+    if(fo){
+      if(clickable) fo.setAttribute("title","Klicken zum Ein-/Ausklappen");
+      else fo.removeAttribute("title");
+    }
+  });
+};
+
+const afterRender=()=>{
+  markClickableNodes();
+  setTimeout(markClickableNodes,80);
+  setTimeout(markClickableNodes,520);
+  setTimeout(removeDefaultMarkmapToolbar,0);
+  setTimeout(removeDefaultMarkmapToolbar,300);
+};
+
+function removeDefaultMarkmapToolbar(){
+  document.querySelectorAll(".mm-toolbar,.markmap-toolbar,.mm-toolbar-brand").forEach(el=>el.remove());
+}
+
+function removeCustomToolbar(){
+  if(toolbarEl&&toolbarEl.parentNode) toolbarEl.parentNode.removeChild(toolbarEl);
+  toolbarEl=null;
+}
+
+function toolButton(text,title,handler,id){
+  const b=document.createElement("button");
+  b.type="button";
+  b.className="toolbtn";
+  b.textContent=text;
+  b.title=title;
+  b.setAttribute("aria-label",title);
+  if(id) b.id=id;
+  b.addEventListener("click",handler);
+  return b;
+}
+
+function makeToolbar(){
+  removeCustomToolbar();
+  toolbarEl=document.createElement("div");
+  toolbarEl.className="custom-toolbar";
+  toolbarEl.setAttribute("aria-label","Mindmap-Werkzeugleiste");
+
+  const brand=document.createElement("span");
+  brand.className="toolbar-brand";
+  brand.textContent="Lernmap";
+
+  toolbarEl.append(
+    brand,
+    toolButton("+","Vergrößern",()=>rescale(1.18)),
+    toolButton("−","Verkleinern",()=>rescale(.85)),
+    toolButton("⛶","An Fenster anpassen",()=>fit(0)),
+    toolButton("◎","Überblick",()=>{
+      search.value="";
+      resetSearchState();
+      renderMap(DATA,"Überblick · Hauptbereiche sichtbar · Text oder Kreis anklicken zum Öffnen","overview",2);
+    }),
+    toolButton("↕","Alles aufklappen",()=>{
+      search.value="";
+      resetSearchState();
+      renderMap(DATA,`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`,"full",-1);
+    }),
+    toolButton(document.documentElement.dataset.theme==="dark" ? "☀" : "☾","Hell/Dunkel wechseln",()=>toggle(),"toolbarTheme")
+  );
+
+  document.body.appendChild(toolbarEl);
+}
+
+function resetSearchState(){
+  currentSearchRaw="";
+  searchFullPaths.clear();
+  searchCollapsedPaths.clear();
+}
+
+function rerenderCurrentSearch(doFit=true){
+  const raw=search.value.trim();
+  const result=filterTree(DATA,norm(raw));
+  if(!result||!result.children){
+    return false;
+  }
+  renderMap(result,`Suche · Treffer für „${raw}“ · ${count(result)} sichtbare Knoten · Klick: ganzer Original-Unterbaum öffnen/schließen`,"search",-1,doFit);
+  return true;
+}
+
+function searchToggleNode(d,nodeEl){
+  const path=getPath(d,nodeEl);
+  const original=findOriginalByPath(path);
+  if(!original||!original.children||!original.children.length) return false;
+
+  const currentlyFull=searchFullPaths.has(path)||(!searchCollapsedPaths.has(path)&&isRenderedAsFullOriginal(d,path));
+
+  if(currentlyFull){
+    searchFullPaths.delete(path);
+    searchCollapsedPaths.add(path);
+  }else{
+    searchCollapsedPaths.delete(path);
+    searchFullPaths.add(path);
+  }
+
+  rerenderCurrentSearch(true);
+  return true;
+}
+
+function toggleNormalMarkmapNode(e,node){
+  const circle=node.querySelector("circle");
+  try{
+    if(circle){
+      suppressSyntheticClick=true;
+      circle.dispatchEvent(new MouseEvent("click",{bubbles:true,cancelable:true,view:window}));
+      suppressSyntheticClick=false;
+    }else if(mm&&typeof mm.handleClick==="function"){
+      mm.handleClick(e,node.__data__);
+    }else if(mm&&typeof mm.toggleNode==="function"){
+      mm.toggleNode(node.__data__,false);
+    }
+  }finally{
+    suppressSyntheticClick=false;
+    afterRender();
+  }
+}
+
+function bindNodeToggle(){
+  const svg=$("mindmap");
+  if(!svg||svg.dataset.nodeToggleBound) return;
+  svg.dataset.nodeToggleBound="1";
+
+  svg.addEventListener("click",e=>{
+    if(suppressSyntheticClick) return;
+    const node=closestMarkmapNode(e.target);
+    if(!node) return;
+
+    const d=node.__data__;
+    if(!canToggleNode(d,node)) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    if(typeof e.stopImmediatePropagation==="function") e.stopImmediatePropagation();
+
+    if(isSearchMode()){
+      if(searchToggleNode(d,node)) return;
+    }
+
+    toggleNormalMarkmapNode(e,node);
+  },true);
+}
+
+function renderMap(data,label,view,initialExpandLevel,doFit=true){
+  if(!window.markmap||!window.d3){
+    show("Markmap konnte nicht geladen werden. Bitte Internetverbindung oder CDN-Zugriff prüfen.");
+    return;
+  }
+
+  activeView=view;
+  setActive(view);
+  setBadge(label);
+  currentZoom=1;
+
+  const svg=document.querySelector("svg#mindmap");
+  svg.innerHTML="";
+  removeDefaultMarkmapToolbar();
+  removeCustomToolbar();
+
+  const {Markmap,deriveOptions}=window.markmap;
+  const options=deriveOptions({
+    autoFit:true,
+    colorFreezeLevel:2,
+    duration:420,
+    initialExpandLevel,
+    maxWidth:360,
+    spacingHorizontal:92,
+    spacingVertical:11
+  });
+
+  mm=Markmap.create("svg#mindmap",options,prepareForRender(data));
+  window.mm=mm;
+  window.psychosomatikMindmapData=DATA;
+  window.lernMindmapData=DATA;
+
+  makeToolbar();
+  afterRender();
+  if(doFit) fit(180);
+}
+
+function searchTree(resetManual=true){
+  const raw=search.value.trim();
+
+  if(!raw){
+    resetSearchState();
+    renderMap(DATA,`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`,"full",-1);
+    return;
+  }
+
+  if(resetManual&&raw!==currentSearchRaw){
+    searchFullPaths.clear();
+    searchCollapsedPaths.clear();
+  }
+  currentSearchRaw=raw;
+
+  const result=filterTree(DATA,norm(raw));
+
+  if(!result||!result.children||result.children.length===0){
+    const empty={
+      content:DATA.content,
+      __path:"",
+      children:[{
+        content:`Keine Treffer für „${raw}“`,
+        __path:"no-result",
+        children:[{content:"Tipp: Suche kürzer, z. B. „Depression“, „Angst“, „Trauma“, „Schlaf“, „Psychose" ,__path:"no-result.0",children:[]}]
+      }]
+    };
+    renderMap(empty,`Suche · keine Treffer für „${raw}“`,"search",-1);
+    show(`Keine Treffer für „${raw}“. Versuche ein kürzeres Suchwort.`);
+    return;
+  }
+
+  renderMap(result,`Suche · Treffer für „${raw}“ · ${count(result)} sichtbare Knoten · Klick: ganzer Original-Unterbaum öffnen/schließen`,"search",-1);
+}
+
+full.addEventListener("click",()=>{
+  search.value="";
+  resetSearchState();
+  renderMap(DATA,`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`,"full",-1);
+});
+
+overview.addEventListener("click",()=>{
+  search.value="";
+  resetSearchState();
+  renderMap(DATA,"Überblick · Hauptbereiche sichtbar · Text oder Kreis anklicken zum Öffnen","overview",2);
+});
+
+searchBtn.addEventListener("click",()=>searchTree(true));
+
+search.addEventListener("keydown",e=>{
+  if(e.key==="Enter") searchTree(true);
+  if(e.key==="Escape"){
+    search.value="";
+    resetSearchState();
+    renderMap(DATA,`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`,"full",-1);
+  }
+});
+
+let searchTimer;
+search.addEventListener("input",()=>{
+  clearTimeout(searchTimer);
+  searchTimer=setTimeout(()=>searchTree(true),260);
+});
+
+clearSearch.addEventListener("click",()=>{
+  search.value="";
+  resetSearchState();
+  renderMap(DATA,`Vollansicht · ${DATA.children.length} Hauptbereiche · ${count(DATA)} Begriffe/Knoten`,"full",-1);
+  search.focus();
+});
+
+theme.addEventListener("click",toggle);
+window.addEventListener("resize",()=>fit(160));
+
+apply(pref(),false);
+bindNodeToggle();
+
+window.addEventListener("load",()=>{
+  renderMap(DATA,"Überblick · Hauptbereiche sichtbar · Text oder Kreis anklicken zum Öffnen","overview",2);
+});
+
+})();
+
+</script></body></html>
